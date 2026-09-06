@@ -1,0 +1,51 @@
+name: Source adapter request
+description: Propose a compliant new source adapter
+title: '[Adapter]: '
+labels:
+  - adapter
+  - enhancement
+body:
+  - type: input
+    id: source
+    attributes:
+      label: Source or format
+      description: Name the file format, API, feed, or system.
+    validations:
+      required: true
+  - type: textarea
+    id: authorization
+    attributes:
+      label: Authorization model
+      description: Explain why the user is allowed to access and process this data, and whether credentials are required.
+    validations:
+      required: true
+  - type: textarea
+    id: retrieval
+    attributes:
+      label: Retrieval and limits
+      description: Describe the official interface, pagination, rate limits, cancellation, and retention behavior. Do not paste credentials or private endpoints.
+    validations:
+      required: true
+  - type: textarea
+    id: mapping
+    attributes:
+      label: Normalized field mapping
+      description: Map source fields to id, source, title, content, author, publishedAt, url, and metadata.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Public documentation
+      description: Link official source terms and API or format documentation when applicable.
+  - type: checkboxes
+    id: compliance
+    attributes:
+      label: Compliance confirmation
+      options:
+        - label: Normal use does not bypass CAPTCHA, authentication, access control, rate limits, or platform safeguards.
+          required: true
+        - label: Examples and fixtures can be synthetic or safely redistributable.
+          required: true
+        - label: I have read docs/compliance.md and docs/source-adapter.md.
+          required: true

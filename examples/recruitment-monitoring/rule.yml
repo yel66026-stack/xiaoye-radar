@@ -1,0 +1,15 @@
+id: recruitment-monitoring-example
+name: Recruitment monitoring
+enabled: true
+priority: low
+time_window:
+  days: 21
+include: [hiring, engineer, role]
+exclude: [advertisement, sponsored]
+score:
+  TypeScript: 18
+  remote: 12
+  hiring: 10
+basic_score: 4
+minimum_score: 12
+deduplication: content

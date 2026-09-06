@@ -1,0 +1,62 @@
+{
+  "name": "xiaoye-radar-community",
+  "version": "0.4.0",
+  "description": "Open-source public content monitoring, filtering and human-review toolkit.",
+  "type": "module",
+  "private": true,
+  "license": "Apache-2.0",
+  "author": "Xiaoye Radar contributors",
+  "main": "./out/main/index.js",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "predev": "install-electron --no",
+    "dev": "electron-vite dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "vitest run tests/integration",
+    "build": "npm run typecheck && electron-vite build",
+    "dist:win": "npm run build && electron-builder --win portable",
+    "smoke:portable": "node scripts/smoke-portable.mjs",
+    "verify:secrets": "node scripts/check-secrets.mjs",
+    "verify:secret-history": "node scripts/check-secrets.mjs --history",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run verify:secrets && npm run verify:secret-history && npm run build"
+  },
+  "dependencies": {
+    "csv-parse": "7.0.2",
+    "fast-xml-parser": "5.11.1",
+    "lucide-react": "1.39.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "yaml": "2.9.0",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "26.4.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "@vitejs/plugin-react": "5.1.4",
+    "electron": "44.1.1",
+    "electron-builder": "26.15.3",
+    "electron-vite": "5.0.0",
+    "eslint": "10.9.1",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "eslint-plugin-react-refresh": "0.5.6",
+    "globals": "17.12.0",
+    "prettier": "3.9.6",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.69.0",
+    "vite": "7.3.6",
+    "vitest": "4.1.11"
+  }
+}

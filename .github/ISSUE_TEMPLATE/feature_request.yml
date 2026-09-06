@@ -1,0 +1,49 @@
+name: Feature request
+description: Propose a scoped improvement to Community Edition
+title: '[Feature]: '
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case
+      description: Explain the workflow problem without sharing data you cannot publish.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe the smallest useful behavior and its boundaries.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Include an existing workflow or package if one already solves the problem.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Desktop UI
+        - Rule Engine
+        - Source Adapter SDK
+        - Storage
+        - Human Review
+        - Export
+        - Documentation
+        - Build and tooling
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Project boundaries
+      options:
+        - label: The request does not require private Pro code or data.
+          required: true
+        - label: The request does not bypass authentication, access controls, rate limits, CAPTCHA, or platform safeguards.
+          required: true

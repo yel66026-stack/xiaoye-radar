@@ -1,0 +1,26 @@
+[
+  {
+    "id": "brand-1",
+    "title": "Northstar launch",
+    "content": "Northstar release coverage with a positive product mention.",
+    "relativeHours": 1
+  },
+  {
+    "id": "brand-2",
+    "title": "Northstar support",
+    "content": "A customer reports a Northstar outage and needs help.",
+    "relativeHours": 4
+  },
+  {
+    "id": "brand-3",
+    "title": "Paid Northstar post",
+    "content": "Sponsored advertisement for Northstar.",
+    "relativeHours": 6
+  },
+  {
+    "id": "brand-4",
+    "title": "Other product",
+    "content": "A post unrelated to the monitored brand.",
+    "relativeHours": 2
+  }
+]

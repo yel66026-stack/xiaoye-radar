@@ -1,0 +1,29 @@
+appId: com.xiaoye.radar.community
+productName: Xiaoye Radar Community
+artifactName: Xiaoye-Radar-Community-${version}-${arch}.${ext}
+asar: true
+npmRebuild: false
+directories:
+  output: release/community
+files:
+  - out/**/*
+  - package.json
+extraResources:
+  - from: examples
+    to: examples
+    filter:
+      - '**/*'
+  - from: LICENSE
+    to: LICENSE
+  - from: THIRD_PARTY_NOTICES.md
+    to: THIRD_PARTY_NOTICES.md
+electronLanguages:
+  - zh-CN
+  - en-US
+win:
+  target:
+    - target: portable
+      arch:
+        - x64
+portable:
+  artifactName: Xiaoye-Radar-Community-${version}-portable-${arch}.${ext}

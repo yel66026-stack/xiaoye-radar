@@ -1,0 +1,15 @@
+id: brand-monitoring-example
+name: Northstar brand monitoring
+enabled: true
+priority: normal
+time_window:
+  days: 7
+include: [Northstar]
+exclude: [advertisement, sponsored]
+score:
+  outage: 25
+  help: 15
+  release: 10
+basic_score: 8
+minimum_score: 10
+deduplication: url

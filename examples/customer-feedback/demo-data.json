@@ -1,0 +1,26 @@
+[
+  {
+    "id": "feedback-1",
+    "title": "Export feedback",
+    "content": "The export is broken after the last update. Help is needed.",
+    "relativeHours": 2
+  },
+  {
+    "id": "feedback-2",
+    "title": "Feature suggestion",
+    "content": "Feedback: please add a compact table view.",
+    "relativeHours": 5
+  },
+  {
+    "id": "feedback-3",
+    "title": "Sponsored review",
+    "content": "Advertisement and sponsored feedback.",
+    "relativeHours": 6
+  },
+  {
+    "id": "feedback-4",
+    "title": "Old issue",
+    "content": "An issue recorded long before the active window.",
+    "relativeHours": 900
+  }
+]

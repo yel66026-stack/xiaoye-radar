@@ -1,0 +1,30 @@
+[
+  {
+    "id": "legal-1",
+    "title": "工资被拖欠怎么办",
+    "content": "公司三个月没有支付工资，想了解劳动仲裁。",
+    "author": "虚构用户甲",
+    "relativeHours": 3
+  },
+  {
+    "id": "legal-2",
+    "title": "交通事故处理",
+    "content": "发生交通事故后应该如何保存材料？",
+    "author": "虚构用户乙",
+    "relativeHours": 8
+  },
+  {
+    "id": "legal-3",
+    "title": "每日普法",
+    "content": "XX律师事务所分享劳动法知识。",
+    "author": "虚构机构",
+    "relativeHours": 4
+  },
+  {
+    "id": "legal-4",
+    "title": "合同问题",
+    "content": "对方不履行合同，想了解可以怎么处理。",
+    "author": "虚构用户丙",
+    "relativeHours": 20
+  }
+]

@@ -1,0 +1,27 @@
+id: legal-lead-triage-example
+name: Legal help triage example
+description: A synthetic rule-engine example, not an automated client-acquisition tool.
+enabled: true
+priority: high
+time_window:
+  days: 3
+include:
+  - 找律师
+  - 怎么办
+  - 劳动仲裁
+  - 工资
+  - 交通事故
+  - 合同
+exclude:
+  - 律师事务所
+  - 每日普法
+  - 法律知识分享
+  - 律师在线答疑
+score:
+  找律师: 20
+  求助: 15
+  怎么办: 8
+  劳动仲裁: 18
+basic_score: 5
+minimum_score: 10
+deduplication: content

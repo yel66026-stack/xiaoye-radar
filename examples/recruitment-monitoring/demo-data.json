@@ -1,0 +1,26 @@
+[
+  {
+    "id": "job-1",
+    "title": "Frontend engineer",
+    "content": "Hiring a TypeScript frontend engineer for a remote role.",
+    "relativeHours": 2
+  },
+  {
+    "id": "job-2",
+    "title": "Backend role",
+    "content": "Hiring a backend engineer with Node.js experience.",
+    "relativeHours": 8
+  },
+  {
+    "id": "job-3",
+    "title": "Recruitment ad",
+    "content": "Sponsored recruitment advertisement.",
+    "relativeHours": 5
+  },
+  {
+    "id": "job-4",
+    "title": "Old opening",
+    "content": "Hiring notice outside the active time window.",
+    "relativeHours": 1500
+  }
+]

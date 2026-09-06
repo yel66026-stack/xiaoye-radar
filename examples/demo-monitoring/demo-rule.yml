@@ -1,0 +1,31 @@
+id: demo-monitoring-rule
+name: Demo monitoring rule
+description: General-purpose synthetic feedback and issue triage.
+enabled: true
+priority: normal
+
+time_window:
+  days: 14
+
+include:
+  - issue
+  - feedback
+  - question
+  - help
+
+exclude:
+  - advertisement
+  - sponsored
+
+score:
+  urgent: 30
+  broken: 20
+  issue: 15
+  feedback: 10
+  question: 5
+  help: 12
+  suggestion: 12
+
+basic_score: 3
+minimum_score: 15
+deduplication: content

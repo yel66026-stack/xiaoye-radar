@@ -1,0 +1,61 @@
+name: Bug report
+description: Report a reproducible Community Edition problem
+title: '[Bug]: '
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, private records, authentication state, or exploitable security details. Follow SECURITY.md for private reporting.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: App version, commit, or release artifact name.
+      placeholder: 0.4.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How are you running Xiaoye Radar?
+      options:
+        - Windows portable release
+        - Source development mode
+        - Production build from source
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the observed result and the result you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Use synthetic or safely redacted data.
+      placeholder: |
+        1. Open...
+        2. Import...
+        3. Select...
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Relevant diagnostics
+      description: Paste a minimal stack trace or screenshot after removing personal data, credentials, and unrelated local paths.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched for an existing issue.
+          required: true
+        - label: I removed credentials, private data, and authentication state.
+          required: true
+        - label: This is not a vulnerability that needs private reporting.
+          required: true

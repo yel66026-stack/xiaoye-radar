@@ -1,0 +1,8 @@
+{
+  "name": "@xiaoye-radar/storage",
+  "version": "0.4.0",
+  "description": "Local JSON storage for Xiaoye Radar Community Edition.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "exports": "./src/index.ts"
+}

@@ -1,0 +1,16 @@
+id: customer-feedback-example
+name: Customer feedback
+enabled: true
+priority: normal
+time_window:
+  days: 30
+include: [feedback, issue, help, suggestion]
+exclude: [advertisement, sponsored]
+score:
+  broken: 25
+  issue: 15
+  feedback: 10
+  suggestion: 10
+basic_score: 4
+minimum_score: 12
+deduplication: content

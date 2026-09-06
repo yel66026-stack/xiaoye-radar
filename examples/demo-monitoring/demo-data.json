@@ -1,0 +1,802 @@
+[
+  {
+    "id": 1,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 1",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 1.",
+    "author": "Synthetic author 001",
+    "url": "https://example.invalid/public-content/1",
+    "relativeHours": 1,
+    "category": "high-score"
+  },
+  {
+    "id": 2,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 2",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 2.",
+    "author": "Synthetic author 002",
+    "url": "https://example.invalid/public-content/2",
+    "relativeHours": 2,
+    "category": "high-score"
+  },
+  {
+    "id": 3,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 3",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 3.",
+    "author": "Synthetic author 003",
+    "url": "https://example.invalid/public-content/3",
+    "relativeHours": 3,
+    "category": "high-score"
+  },
+  {
+    "id": 4,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 4",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 4.",
+    "author": "Synthetic author 004",
+    "url": "https://example.invalid/public-content/4",
+    "relativeHours": 4,
+    "category": "high-score"
+  },
+  {
+    "id": 5,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 5",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 5.",
+    "author": "Synthetic author 005",
+    "url": "https://example.invalid/public-content/5",
+    "relativeHours": 5,
+    "category": "high-score"
+  },
+  {
+    "id": 6,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 6",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 6.",
+    "author": "Synthetic author 006",
+    "url": "https://example.invalid/public-content/6",
+    "relativeHours": 6,
+    "category": "high-score"
+  },
+  {
+    "id": 7,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 7",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 7.",
+    "author": "Synthetic author 007",
+    "url": "https://example.invalid/public-content/7",
+    "relativeHours": 7,
+    "category": "high-score"
+  },
+  {
+    "id": 8,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 8",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 8.",
+    "author": "Synthetic author 008",
+    "url": "https://example.invalid/public-content/8",
+    "relativeHours": 8,
+    "category": "high-score"
+  },
+  {
+    "id": 9,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 9",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 9.",
+    "author": "Synthetic author 009",
+    "url": "https://example.invalid/public-content/9",
+    "relativeHours": 9,
+    "category": "high-score"
+  },
+  {
+    "id": 10,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 10",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 10.",
+    "author": "Synthetic author 010",
+    "url": "https://example.invalid/public-content/10",
+    "relativeHours": 10,
+    "category": "high-score"
+  },
+  {
+    "id": 11,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 11",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 11.",
+    "author": "Synthetic author 011",
+    "url": "https://example.invalid/public-content/11",
+    "relativeHours": 11,
+    "category": "high-score"
+  },
+  {
+    "id": 12,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 12",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 12.",
+    "author": "Synthetic author 012",
+    "url": "https://example.invalid/public-content/12",
+    "relativeHours": 12,
+    "category": "high-score"
+  },
+  {
+    "id": 13,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 13",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 13.",
+    "author": "Synthetic author 013",
+    "url": "https://example.invalid/public-content/13",
+    "relativeHours": 13,
+    "category": "high-score"
+  },
+  {
+    "id": 14,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 14",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 14.",
+    "author": "Synthetic author 014",
+    "url": "https://example.invalid/public-content/14",
+    "relativeHours": 14,
+    "category": "high-score"
+  },
+  {
+    "id": 15,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 15",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 15.",
+    "author": "Synthetic author 015",
+    "url": "https://example.invalid/public-content/15",
+    "relativeHours": 15,
+    "category": "high-score"
+  },
+  {
+    "id": 16,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 16",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 16.",
+    "author": "Synthetic author 016",
+    "url": "https://example.invalid/public-content/16",
+    "relativeHours": 16,
+    "category": "high-score"
+  },
+  {
+    "id": 17,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 17",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 17.",
+    "author": "Synthetic author 017",
+    "url": "https://example.invalid/public-content/17",
+    "relativeHours": 17,
+    "category": "high-score"
+  },
+  {
+    "id": 18,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 18",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 18.",
+    "author": "Synthetic author 018",
+    "url": "https://example.invalid/public-content/18",
+    "relativeHours": 18,
+    "category": "high-score"
+  },
+  {
+    "id": 19,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 19",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 19.",
+    "author": "Synthetic author 019",
+    "url": "https://example.invalid/public-content/19",
+    "relativeHours": 19,
+    "category": "high-score"
+  },
+  {
+    "id": 20,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 20",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 20.",
+    "author": "Synthetic author 020",
+    "url": "https://example.invalid/public-content/20",
+    "relativeHours": 20,
+    "category": "high-score"
+  },
+  {
+    "id": 21,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 21",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 21.",
+    "author": "Synthetic author 021",
+    "url": "https://example.invalid/public-content/21",
+    "relativeHours": 21,
+    "category": "high-score"
+  },
+  {
+    "id": 22,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 22",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 22.",
+    "author": "Synthetic author 022",
+    "url": "https://example.invalid/public-content/22",
+    "relativeHours": 22,
+    "category": "high-score"
+  },
+  {
+    "id": 23,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 23",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 23.",
+    "author": "Synthetic author 023",
+    "url": "https://example.invalid/public-content/23",
+    "relativeHours": 23,
+    "category": "high-score"
+  },
+  {
+    "id": 24,
+    "source": "demo-monitoring",
+    "title": "Urgent issue report 24",
+    "content": "I need help: an important workflow is broken. This urgent issue affects the demo team 24.",
+    "author": "Synthetic author 024",
+    "url": "https://example.invalid/public-content/24",
+    "relativeHours": 24,
+    "category": "high-score"
+  },
+  {
+    "id": 25,
+    "source": "demo-monitoring",
+    "title": "Product feedback 25",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 025",
+    "url": "https://example.invalid/public-content/25",
+    "relativeHours": 6,
+    "category": "positive-match"
+  },
+  {
+    "id": 26,
+    "source": "demo-monitoring",
+    "title": "Product feedback 26",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 026",
+    "url": "https://example.invalid/public-content/26",
+    "relativeHours": 7,
+    "category": "positive-match"
+  },
+  {
+    "id": 27,
+    "source": "demo-monitoring",
+    "title": "Product feedback 27",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 027",
+    "url": "https://example.invalid/public-content/27",
+    "relativeHours": 8,
+    "category": "positive-match"
+  },
+  {
+    "id": 28,
+    "source": "demo-monitoring",
+    "title": "Product feedback 28",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 028",
+    "url": "https://example.invalid/public-content/28",
+    "relativeHours": 9,
+    "category": "positive-match"
+  },
+  {
+    "id": 29,
+    "source": "demo-monitoring",
+    "title": "Product feedback 29",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 029",
+    "url": "https://example.invalid/public-content/29",
+    "relativeHours": 10,
+    "category": "positive-match"
+  },
+  {
+    "id": 30,
+    "source": "demo-monitoring",
+    "title": "Product feedback 30",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 030",
+    "url": "https://example.invalid/public-content/30",
+    "relativeHours": 11,
+    "category": "positive-match"
+  },
+  {
+    "id": 31,
+    "source": "demo-monitoring",
+    "title": "Product feedback 31",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 031",
+    "url": "https://example.invalid/public-content/31",
+    "relativeHours": 12,
+    "category": "positive-match"
+  },
+  {
+    "id": 32,
+    "source": "demo-monitoring",
+    "title": "Product feedback 32",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 032",
+    "url": "https://example.invalid/public-content/32",
+    "relativeHours": 13,
+    "category": "positive-match"
+  },
+  {
+    "id": 33,
+    "source": "demo-monitoring",
+    "title": "Product feedback 33",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 033",
+    "url": "https://example.invalid/public-content/33",
+    "relativeHours": 14,
+    "category": "positive-match"
+  },
+  {
+    "id": 34,
+    "source": "demo-monitoring",
+    "title": "Product feedback 34",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 034",
+    "url": "https://example.invalid/public-content/34",
+    "relativeHours": 15,
+    "category": "positive-match"
+  },
+  {
+    "id": 35,
+    "source": "demo-monitoring",
+    "title": "Product feedback 35",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 035",
+    "url": "https://example.invalid/public-content/35",
+    "relativeHours": 16,
+    "category": "positive-match"
+  },
+  {
+    "id": 36,
+    "source": "demo-monitoring",
+    "title": "Product feedback 36",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 036",
+    "url": "https://example.invalid/public-content/36",
+    "relativeHours": 17,
+    "category": "positive-match"
+  },
+  {
+    "id": 37,
+    "source": "demo-monitoring",
+    "title": "Product feedback 37",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 037",
+    "url": "https://example.invalid/public-content/37",
+    "relativeHours": 18,
+    "category": "positive-match"
+  },
+  {
+    "id": 38,
+    "source": "demo-monitoring",
+    "title": "Product feedback 38",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 038",
+    "url": "https://example.invalid/public-content/38",
+    "relativeHours": 19,
+    "category": "positive-match"
+  },
+  {
+    "id": 39,
+    "source": "demo-monitoring",
+    "title": "Product feedback 39",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 039",
+    "url": "https://example.invalid/public-content/39",
+    "relativeHours": 20,
+    "category": "positive-match"
+  },
+  {
+    "id": 40,
+    "source": "demo-monitoring",
+    "title": "Product feedback 40",
+    "content": "Feedback from a synthetic tester with a practical suggestion for the next release.",
+    "author": "Synthetic author 040",
+    "url": "https://example.invalid/public-content/40",
+    "relativeHours": 21,
+    "category": "positive-match"
+  },
+  {
+    "id": 41,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 41",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 041",
+    "url": "https://example.invalid/public-content/41",
+    "relativeHours": 2,
+    "category": "excluded"
+  },
+  {
+    "id": 42,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 42",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 042",
+    "url": "https://example.invalid/public-content/42",
+    "relativeHours": 3,
+    "category": "excluded"
+  },
+  {
+    "id": 43,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 43",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 043",
+    "url": "https://example.invalid/public-content/43",
+    "relativeHours": 4,
+    "category": "excluded"
+  },
+  {
+    "id": 44,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 44",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 044",
+    "url": "https://example.invalid/public-content/44",
+    "relativeHours": 5,
+    "category": "excluded"
+  },
+  {
+    "id": 45,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 45",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 045",
+    "url": "https://example.invalid/public-content/45",
+    "relativeHours": 6,
+    "category": "excluded"
+  },
+  {
+    "id": 46,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 46",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 046",
+    "url": "https://example.invalid/public-content/46",
+    "relativeHours": 7,
+    "category": "excluded"
+  },
+  {
+    "id": 47,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 47",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 047",
+    "url": "https://example.invalid/public-content/47",
+    "relativeHours": 8,
+    "category": "excluded"
+  },
+  {
+    "id": 48,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 48",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 048",
+    "url": "https://example.invalid/public-content/48",
+    "relativeHours": 9,
+    "category": "excluded"
+  },
+  {
+    "id": 49,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 49",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 049",
+    "url": "https://example.invalid/public-content/49",
+    "relativeHours": 10,
+    "category": "excluded"
+  },
+  {
+    "id": 50,
+    "source": "demo-monitoring",
+    "title": "Sponsored feedback roundup 50",
+    "content": "Advertisement and sponsored feedback created only to demonstrate exclusion rules.",
+    "author": "Synthetic author 050",
+    "url": "https://example.invalid/public-content/50",
+    "relativeHours": 11,
+    "category": "excluded"
+  },
+  {
+    "id": 51,
+    "source": "demo-monitoring",
+    "title": "Older issue report 51",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 051",
+    "url": "https://example.invalid/public-content/51",
+    "relativeHours": 411,
+    "category": "expired"
+  },
+  {
+    "id": 52,
+    "source": "demo-monitoring",
+    "title": "Older issue report 52",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 052",
+    "url": "https://example.invalid/public-content/52",
+    "relativeHours": 412,
+    "category": "expired"
+  },
+  {
+    "id": 53,
+    "source": "demo-monitoring",
+    "title": "Older issue report 53",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 053",
+    "url": "https://example.invalid/public-content/53",
+    "relativeHours": 413,
+    "category": "expired"
+  },
+  {
+    "id": 54,
+    "source": "demo-monitoring",
+    "title": "Older issue report 54",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 054",
+    "url": "https://example.invalid/public-content/54",
+    "relativeHours": 414,
+    "category": "expired"
+  },
+  {
+    "id": 55,
+    "source": "demo-monitoring",
+    "title": "Older issue report 55",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 055",
+    "url": "https://example.invalid/public-content/55",
+    "relativeHours": 415,
+    "category": "expired"
+  },
+  {
+    "id": 56,
+    "source": "demo-monitoring",
+    "title": "Older issue report 56",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 056",
+    "url": "https://example.invalid/public-content/56",
+    "relativeHours": 416,
+    "category": "expired"
+  },
+  {
+    "id": 57,
+    "source": "demo-monitoring",
+    "title": "Older issue report 57",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 057",
+    "url": "https://example.invalid/public-content/57",
+    "relativeHours": 417,
+    "category": "expired"
+  },
+  {
+    "id": 58,
+    "source": "demo-monitoring",
+    "title": "Older issue report 58",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 058",
+    "url": "https://example.invalid/public-content/58",
+    "relativeHours": 418,
+    "category": "expired"
+  },
+  {
+    "id": 59,
+    "source": "demo-monitoring",
+    "title": "Older issue report 59",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 059",
+    "url": "https://example.invalid/public-content/59",
+    "relativeHours": 419,
+    "category": "expired"
+  },
+  {
+    "id": 60,
+    "source": "demo-monitoring",
+    "title": "Older issue report 60",
+    "content": "This issue would match, but its synthetic publication time is outside the configured window.",
+    "author": "Synthetic author 060",
+    "url": "https://example.invalid/public-content/60",
+    "relativeHours": 420,
+    "category": "expired"
+  },
+  {
+    "id": 61,
+    "source": "demo-monitoring",
+    "title": "General question 61",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 061",
+    "url": "https://example.invalid/public-content/61",
+    "relativeHours": 3,
+    "category": "low-score"
+  },
+  {
+    "id": 62,
+    "source": "demo-monitoring",
+    "title": "General question 62",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 062",
+    "url": "https://example.invalid/public-content/62",
+    "relativeHours": 4,
+    "category": "low-score"
+  },
+  {
+    "id": 63,
+    "source": "demo-monitoring",
+    "title": "General question 63",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 063",
+    "url": "https://example.invalid/public-content/63",
+    "relativeHours": 5,
+    "category": "low-score"
+  },
+  {
+    "id": 64,
+    "source": "demo-monitoring",
+    "title": "General question 64",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 064",
+    "url": "https://example.invalid/public-content/64",
+    "relativeHours": 6,
+    "category": "low-score"
+  },
+  {
+    "id": 65,
+    "source": "demo-monitoring",
+    "title": "General question 65",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 065",
+    "url": "https://example.invalid/public-content/65",
+    "relativeHours": 7,
+    "category": "low-score"
+  },
+  {
+    "id": 66,
+    "source": "demo-monitoring",
+    "title": "General question 66",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 066",
+    "url": "https://example.invalid/public-content/66",
+    "relativeHours": 8,
+    "category": "low-score"
+  },
+  {
+    "id": 67,
+    "source": "demo-monitoring",
+    "title": "General question 67",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 067",
+    "url": "https://example.invalid/public-content/67",
+    "relativeHours": 9,
+    "category": "low-score"
+  },
+  {
+    "id": 68,
+    "source": "demo-monitoring",
+    "title": "General question 68",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 068",
+    "url": "https://example.invalid/public-content/68",
+    "relativeHours": 10,
+    "category": "low-score"
+  },
+  {
+    "id": 69,
+    "source": "demo-monitoring",
+    "title": "General question 69",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 069",
+    "url": "https://example.invalid/public-content/69",
+    "relativeHours": 11,
+    "category": "low-score"
+  },
+  {
+    "id": 70,
+    "source": "demo-monitoring",
+    "title": "General question 70",
+    "content": "A question with little context, intentionally kept below the candidate score threshold.",
+    "author": "Synthetic author 070",
+    "url": "https://example.invalid/public-content/70",
+    "relativeHours": 12,
+    "category": "low-score"
+  },
+  {
+    "id": 71,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 1",
+    "content": "Help with a broken demo workflow. Duplicate pair 1 has intentionally identical text.",
+    "author": "Synthetic author 071",
+    "url": "https://example.invalid/public-content/71",
+    "relativeHours": 2,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 72,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 1",
+    "content": "Help with a broken demo workflow. Duplicate pair 1 has intentionally identical text.",
+    "author": "Synthetic author 072",
+    "url": "https://example.invalid/public-content/72",
+    "relativeHours": 2,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 73,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 2",
+    "content": "Help with a broken demo workflow. Duplicate pair 2 has intentionally identical text.",
+    "author": "Synthetic author 073",
+    "url": "https://example.invalid/public-content/73",
+    "relativeHours": 3,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 74,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 2",
+    "content": "Help with a broken demo workflow. Duplicate pair 2 has intentionally identical text.",
+    "author": "Synthetic author 074",
+    "url": "https://example.invalid/public-content/74",
+    "relativeHours": 3,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 75,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 3",
+    "content": "Help with a broken demo workflow. Duplicate pair 3 has intentionally identical text.",
+    "author": "Synthetic author 075",
+    "url": "https://example.invalid/public-content/75",
+    "relativeHours": 4,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 76,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 3",
+    "content": "Help with a broken demo workflow. Duplicate pair 3 has intentionally identical text.",
+    "author": "Synthetic author 076",
+    "url": "https://example.invalid/public-content/76",
+    "relativeHours": 4,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 77,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 4",
+    "content": "Help with a broken demo workflow. Duplicate pair 4 has intentionally identical text.",
+    "author": "Synthetic author 077",
+    "url": "https://example.invalid/public-content/77",
+    "relativeHours": 5,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 78,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 4",
+    "content": "Help with a broken demo workflow. Duplicate pair 4 has intentionally identical text.",
+    "author": "Synthetic author 078",
+    "url": "https://example.invalid/public-content/78",
+    "relativeHours": 5,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 79,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 5",
+    "content": "Help with a broken demo workflow. Duplicate pair 5 has intentionally identical text.",
+    "author": "Synthetic author 079",
+    "url": "https://example.invalid/public-content/79",
+    "relativeHours": 6,
+    "category": "duplicate-pair"
+  },
+  {
+    "id": 80,
+    "source": "demo-monitoring",
+    "title": "Repeated help request 5",
+    "content": "Help with a broken demo workflow. Duplicate pair 5 has intentionally identical text.",
+    "author": "Synthetic author 080",
+    "url": "https://example.invalid/public-content/80",
+    "relativeHours": 6,
+    "category": "duplicate-pair"
+  }
+]
