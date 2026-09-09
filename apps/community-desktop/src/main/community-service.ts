@@ -86,11 +86,43 @@ export class CommunityService {
   }
 
   async importDemo(): Promise<void> {
-    const dataPath = join(this.#examplesRoot, 'demo-monitoring', 'demo-data.json')
-    const rulePath = join(this.#examplesRoot, 'demo-monitoring', 'demo-rule.yml')
+    await this.#importBundledExample({
+      directory: 'demo-monitoring',
+      dataFile: 'demo-data.json',
+      ruleFile: 'demo-rule.yml',
+      sourceId: 'demo-monitoring',
+      sourceName: 'Demo monitoring',
+      ruleId: 'demo-monitoring-rule',
+      jobName: 'Demo monitoring workflow',
+    })
+  }
+
+  async importLegalInquiryExample(): Promise<void> {
+    await this.#importBundledExample({
+      directory: 'legal-inquiry-triage',
+      dataFile: join('data', 'legal-inquiry-synthetic.json'),
+      ruleFile: join('rules', 'legal-inquiry-basic.yaml'),
+      sourceId: 'legal-inquiry-triage',
+      sourceName: 'Legal Inquiry Triage',
+      ruleId: 'legal-inquiry-basic',
+      jobName: 'Legal inquiry triage workflow',
+    })
+  }
+
+  async #importBundledExample(options: {
+    directory: string
+    dataFile: string
+    ruleFile: string
+    sourceId: string
+    sourceName: string
+    ruleId: string
+    jobName: string
+  }): Promise<void> {
+    const dataPath = join(this.#examplesRoot, options.directory, options.dataFile)
+    const rulePath = join(this.#examplesRoot, options.directory, options.ruleFile)
     const adapter = adapterForPath(dataPath)
     try {
-      await adapter.initialize({ path: dataPath, sourceName: 'Demo monitoring' })
+      await adapter.initialize({ path: dataPath, sourceName: options.sourceName })
       const importedAt = Date.now()
       const items = (await adapter.fetch()).map((item) => {
         const relativeHours = item.metadata.relativeHours
@@ -103,8 +135,8 @@ export class CommunityService {
       })
       await this.#storage.upsertSource(
         {
-          id: 'demo-monitoring',
-          name: 'Demo monitoring',
+          id: options.sourceId,
+          name: options.sourceName,
           adapterKind: 'json',
           fileName: basename(dataPath),
         },
@@ -114,8 +146,8 @@ export class CommunityService {
       await adapter.dispose()
     }
     await this.saveRule(await readFile(rulePath, 'utf8'))
-    await this.ensureJob('demo-monitoring', 'demo-monitoring-rule', 'Demo monitoring workflow')
-    await this.run('demo-monitoring', 'demo-monitoring-rule')
+    await this.ensureJob(options.sourceId, options.ruleId, options.jobName)
+    await this.run(options.sourceId, options.ruleId)
   }
 
   async ensureJob(sourceRecordId: string, ruleId: string, name?: string): Promise<void> {

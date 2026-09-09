@@ -90,6 +90,15 @@ function registerIpc(): void {
     await currentService().importDemo()
     return { ok: true, message: 'Demo imported and scanned', state: await currentService().state() }
   })
+  ipcMain.handle(IPC_CHANNELS.importLegalInquiryExample, async (event) => {
+    assertTrustedSender(event)
+    await currentService().importLegalInquiryExample()
+    return {
+      ok: true,
+      message: 'Legal Inquiry Triage example imported and scanned',
+      state: await currentService().state(),
+    }
+  })
   ipcMain.handle(IPC_CHANNELS.importSource, async (event) => {
     assertTrustedSender(event)
     const result = await dialog.showOpenDialog(mainWindow!, {
@@ -233,6 +242,17 @@ async function start(): Promise<void> {
   await service.initialize()
   if (process.env.XIAOYE_RADAR_AUTO_DEMO === '1' && (!app.isPackaged || capturePath)) {
     await service.importDemo()
+  }
+  if (process.env.XIAOYE_RADAR_AUTO_LEGAL_EXAMPLE === '1' && (!app.isPackaged || capturePath)) {
+    await service.importLegalInquiryExample()
+  }
+  if (process.env.XIAOYE_RADAR_AUTO_REVIEW === '1' && (!app.isPackaged || capturePath)) {
+    const candidate = (await service.state()).candidates.find(
+      ({ ruleId, reviewStatus }) => ruleId === 'legal-inquiry-basic' && reviewStatus === 'pending',
+    )
+    if (candidate) {
+      await service.review(candidate.id, 'approved', 'Automated portable smoke verification')
+    }
   }
   registerIpc()
   mainWindow = createWindow()

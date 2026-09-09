@@ -1,0 +1,69 @@
+id: legal-inquiry-basic
+name: Basic legal inquiry triage
+description: A small deterministic rule pack for reviewing synthetic or lawfully obtained public legal-help text.
+enabled: true
+priority: high
+
+time_window:
+  days: 3
+
+include:
+  - 拖欠工资
+  - 工资不给
+  - 劳动仲裁
+  - 被辞退
+  - 违法解除
+  - 离婚怎么办
+  - 财产怎么分
+  - 欠钱不还
+  - 借钱不还
+  - 怎么起诉
+  - 交通事故赔偿
+  - 合同违约
+  - 消费纠纷
+  - 押金不退
+  - 租房纠纷
+  - 想咨询律师
+  - 需要律师
+  - 法律求助
+  - 怎么办
+  - 求助
+
+exclude:
+  - 律师事务所
+  - 律师团队
+  - 每日普法
+  - 法律科普
+  - 普法课堂
+  - 法律知识
+  - 律师分享
+  - 律师日常
+  - 律师招聘
+  - 法考
+  - 法律培训
+
+score:
+  想咨询律师: 20
+  需要律师: 20
+  法律求助: 15
+  离婚怎么办: 15
+  财产怎么分: 15
+  怎么起诉: 15
+  拖欠工资: 10
+  工资不给: 10
+  劳动仲裁: 10
+  被辞退: 10
+  违法解除: 10
+  欠钱不还: 10
+  借钱不还: 10
+  交通事故赔偿: 10
+  合同违约: 10
+  消费纠纷: 10
+  押金不退: 10
+  租房纠纷: 10
+  怎么办: 5
+  求助: 8
+
+basic_score: 0
+minimum_score: 15
+deduplication: content

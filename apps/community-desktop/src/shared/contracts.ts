@@ -4,6 +4,7 @@ import type { WorkspaceState } from '@xiaoye-radar/storage'
 export const IPC_CHANNELS = {
   bootstrap: 'community:bootstrap',
   importDemo: 'community:import-demo',
+  importLegalInquiryExample: 'community:import-legal-inquiry-example',
   importSource: 'community:import-source',
   saveRule: 'community:save-rule',
   runMonitoring: 'community:run-monitoring',
@@ -31,6 +32,7 @@ export interface ActionResponse {
 export interface CommunityDesktopApi {
   getBootstrap(): Promise<BootstrapResponse>
   importDemo(): Promise<ActionResponse>
+  importLegalInquiryExample(): Promise<ActionResponse>
   importSource(): Promise<ActionResponse | null>
   saveRule(document: string): Promise<ActionResponse>
   runMonitoring(sourceRecordId: string, ruleId: string): Promise<ActionResponse>
