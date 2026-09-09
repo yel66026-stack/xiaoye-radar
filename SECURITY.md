@@ -8,7 +8,7 @@
 | Unreleased default branch | Best effort |
 | Older versions            | No          |
 
-Support begins when the first public `0.4.0` release is published. Until then, the repository is a release candidate.
+Support began with the first public `0.4.0` release. The latest `0.4.x` maintenance release receives support.
 
 ## Reporting a vulnerability
 
@@ -37,4 +37,4 @@ The project does not provide a safe harbor for accessing systems or data without
 
 ## Security-related configuration
 
-Community Edition has no login, telemetry, private service, license server, or updater. It uses a sandboxed renderer, a narrow preload bridge, sender-validated IPC, bounded local imports, schema validation, separate local storage, and a single-instance workspace writer. Packaged releases ignore the development-only data-directory override. User-supplied regular expressions are disabled in `v0.4.0`; they must not be re-enabled until evaluation is isolated from the Electron main process with a hard timeout. See [the architecture](docs/architecture.md) and [compliance policy](docs/compliance.md) for the current boundaries.
+Community Edition has no login, telemetry, private service, license server, or updater. It uses a sandboxed renderer, a narrow preload bridge, sender-validated IPC, bounded local imports, schema validation, separate local storage, and a single-instance workspace writer. Packaged releases ignore the development-only data-directory override. User-supplied regular expressions are disabled in the current release; they must not be re-enabled until evaluation is isolated from the Electron main process with a hard timeout. See [the architecture](docs/architecture.md) and [compliance policy](docs/compliance.md) for the current boundaries.

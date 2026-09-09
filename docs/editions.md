@@ -2,7 +2,7 @@
 
 Xiaoye Radar Community is a complete local workflow for authorized content exports. Pro remains the private commercial desktop product with platform-specific and professional workflows.
 
-| Capability                                            | Community `0.4.0`       | Pro `0.3.1` audited build                                   |
+| Capability                                            | Community `0.4.1`       | Pro `0.3.1` audited build                                   |
 | ----------------------------------------------------- | ----------------------- | ----------------------------------------------------------- |
 | General rule engine                                   | Yes                     | Existing private keyword and scoring implementation         |
 | Include and exclude terms                             | Yes                     | Yes                                                         |

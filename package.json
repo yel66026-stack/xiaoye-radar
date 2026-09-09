@@ -1,6 +1,6 @@
 {
   "name": "xiaoye-radar-community",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Open-source public content monitoring, filtering and human-review toolkit.",
   "type": "module",
   "private": true,
@@ -34,7 +34,7 @@
   "dependencies": {
     "csv-parse": "7.0.2",
     "fast-xml-parser": "5.11.1",
-    "lucide-react": "1.39.0",
+    "lucide-react": "1.40.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "yaml": "2.9.0",
@@ -44,7 +44,7 @@
     "@eslint/js": "10.0.1",
     "@types/node": "26.4.1",
     "@types/react": "19.2.18",
-    "@types/react-dom": "19.2.5",
+    "@types/react-dom": "19.2.7",
     "@vitejs/plugin-react": "5.1.4",
     "electron": "44.1.1",
     "electron-builder": "26.15.3",

@@ -6,7 +6,7 @@
 
 Xiaoye Radar Community turns authorized, public-content exports into a local review workflow. Import CSV, JSON, RSS/Atom, Markdown, or text files; apply source-neutral rules; remove duplicates; review candidates; and export the result without signing in to a platform or calling a private service.
 
-> Status: `v0.4.0` Community Edition. Windows portable builds are currently unsigned. Security reports use GitHub Private Vulnerability Reporting rather than public issues.
+> Status: `v0.4.1` Community Edition. Windows portable builds are currently unsigned. Security reports use GitHub Private Vulnerability Reporting rather than public issues.
 
 ![Xiaoye Radar Community dashboard](docs/images/dashboard.png)
 
@@ -15,6 +15,16 @@ Xiaoye Radar Community turns authorized, public-content exports into a local rev
 Monitoring projects repeatedly need the same middle layer: normalize several input formats, filter a time window, apply include and exclusion rules, rank matches, suppress repeats, keep an audit trail, and leave the final decision to a person. Xiaoye Radar packages that workflow as a usable desktop application and small TypeScript workspaces.
 
 The Community Edition is useful on its own. It has no Pro license check, private API, account login, telemetry, or automatic updater.
+
+## Use cases
+
+- [Legal inquiry triage](examples/legal-inquiry-triage/README.md) with synthetic or lawfully obtained text
+- [Customer feedback](examples/customer-feedback/README.md) review
+- [Brand monitoring](examples/brand-monitoring/README.md) for an authorized source
+- Local RSS/Atom monitoring
+- Custom source adapters that follow the documented authorization boundary
+
+These are examples of the same source-neutral pipeline. None changes Xiaoye Radar into a platform crawler or removes the human-review step.
 
 ## Features
 
@@ -25,7 +35,7 @@ The Community Edition is useful on its own. It has no Pro license check, private
 - Local JSON workspace with serialized atomic writes
 - Pending, approved, rejected, and archived review states
 - CSV and JSON export with spreadsheet-formula injection protection
-- Synthetic 80-record Demo plus legal, customer-feedback, brand, and recruitment examples
+- Synthetic 80-record general Demo plus a tested 100-record Legal Inquiry Triage workflow and other scenario examples
 - Hardened Electron bridge with context isolation, sandboxing, sender validation, and a restrictive CSP
 - English developer documentation and a bilingual desktop interface
 
@@ -147,12 +157,12 @@ export interface SourceAdapter<TConfig = unknown, TRaw = unknown> {
 }
 ```
 
-The first release ships file-based adapters. It deliberately does not ship a crawler, CAPTCHA workaround, credential collector, or authentication bypass. The workspace packages are source workspaces in `v0.4.0`; they are not claimed as published npm packages. See [docs/source-adapter.md](docs/source-adapter.md).
+The Community release ships file-based adapters. It deliberately does not ship a crawler, CAPTCHA workaround, credential collector, or authentication bypass. The workspace packages are source workspaces in `v0.4.1`; they are not claimed as published npm packages. See [docs/source-adapter.md](docs/source-adapter.md).
 
 ## Examples
 
 - [Demo monitoring](examples/demo-monitoring/README.md), an exact end-to-end fixture
-- [Legal help triage](examples/legal-lead-triage/README.md), a synthetic rule-engine example rather than a product definition
+- [Legal Inquiry Triage](examples/legal-inquiry-triage/README.md), a tested 100-record synthetic workflow and basic rule pack
 - [Customer feedback](examples/customer-feedback/README.md)
 - [Brand monitoring](examples/brand-monitoring/README.md), using a fictional brand
 - [Recruitment monitoring](examples/recruitment-monitoring/README.md)
@@ -183,7 +193,7 @@ No Pro source, platform selector, account state, customer data, or commercial ru
 
 The roadmap is directional and does not promise unapproved commercial features. See [ROADMAP.md](ROADMAP.md).
 
-Release changes and current limitations are recorded in [CHANGELOG.md](CHANGELOG.md) and the [`v0.4.0` release notes](docs/RELEASE_NOTES_v0.4.0.md).
+Release changes and current limitations are recorded in [CHANGELOG.md](CHANGELOG.md) and the [`v0.4.1` release notes](docs/RELEASE_NOTES_v0.4.1.md).
 
 ## Contributing
 

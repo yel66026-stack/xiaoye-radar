@@ -6,9 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-09-09
+
+### Added
+
+- Legal Inquiry Triage example with a dashboard entry and complete local workflow
+- Basic legal inquiry rule pack covering seven introductory categories
+- 100-record synthetic legal inquiry dataset with explicit fictional metadata
+- Regression tests for classification, time filtering, deduplication, semantic rule revisions, and absence of personal contact data
+
 ### Changed
 
+- Updated `lucide-react` from 1.39.0 to 1.40.0 and `@types/react-dom` from 19.2.5 to 19.2.7 after compatibility checks.
+- Expanded the English and Chinese use-case documentation while keeping the product source-neutral.
+- Extended portable smoke verification across the general Demo, Legal Inquiry Triage, human review, history, restart persistence, and single-instance behavior.
 - Future regular-expression support must use execution isolation with a hard timeout.
+
+### Fixed
+
+- Regular-expression rejection messages no longer hard-code an earlier Community version.
+
+### Security
+
+- Added automated checks that the legal example uses only fictional identities and `example.invalid` URLs and contains no phone number, email address, social handle, or live platform domain.
 
 ## [0.4.0] - 2026-09-07
 
@@ -40,5 +60,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 No earlier Community version is claimed. The private Pro product has a separate version history that is not copied into this public repository.
 
-[unreleased]: https://github.com/yel66026-stack/xiaoye-radar/compare/v0.4.0...HEAD
+[unreleased]: https://github.com/yel66026-stack/xiaoye-radar/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/yel66026-stack/xiaoye-radar/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/yel66026-stack/xiaoye-radar/releases/tag/v0.4.0

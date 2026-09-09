@@ -134,7 +134,7 @@ describe('RuleEngine', () => {
 
   it('rejects all regular-expression rules until hard-timeout isolation is available', () => {
     expect(() => rule('regex: ["refund\\\\s+request"]')).toThrow(
-      /disabled in v0\.4\.0.*hard-timeout isolation/u,
+      /disabled in this release.*hard-timeout isolation/u,
     )
   })
 

@@ -88,7 +88,7 @@ export function parseRuleDocument(document: string, now = new Date()): RuleSet {
   const regex = uniqueStrings(raw.regex)
   if (regex.length > 0) {
     throw new Error(
-      'Regular-expression rules are disabled in v0.4.0 until hard-timeout isolation is available',
+      'Regular-expression rules are disabled in this release until hard-timeout isolation is available',
     )
   }
 
