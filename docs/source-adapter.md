@@ -4,7 +4,7 @@
 
 The Source Adapter SDK converts an authorized source into the stable `NormalizedContent` model. An adapter obtains input and understands its native fields. It does not score candidates, decide review status, write the workspace, or bypass a source's controls.
 
-The `v0.4.0` packages are source workspaces inside this monorepo. They are not yet advertised as published npm packages.
+The `v0.4.1` packages are source workspaces inside this monorepo. They are not yet advertised as published npm packages.
 
 ## Interface
 

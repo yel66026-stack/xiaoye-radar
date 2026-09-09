@@ -1,6 +1,6 @@
 {
   "name": "@xiaoye-radar/source-sdk",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Source adapter contracts and public file adapters for Xiaoye Radar.",
   "type": "module",
   "license": "Apache-2.0",

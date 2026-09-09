@@ -58,7 +58,7 @@ export class RuleEngine {
   ): RuleDecision {
     if (rule.regex.length > 0) {
       throw new Error(
-        'Regular-expression rules are disabled in v0.4.0 until hard-timeout isolation is available',
+        'Regular-expression rules are disabled in this release until hard-timeout isolation is available',
       )
     }
     const text = normalizeText(`${item.title}\n${item.content}`)

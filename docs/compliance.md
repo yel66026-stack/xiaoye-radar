@@ -38,7 +38,7 @@ File adapters operate on local copies chosen by the user. A future network adapt
 
 ## Examples
 
-All bundled examples are synthetic. The legal-help scenario demonstrates a general rule engine and is not legal advice or a claim that Xiaoye Radar is a lawyer-acquisition tool. The brand name in the brand-monitoring example is fictional.
+All bundled examples are synthetic. The [Legal Inquiry Triage](../examples/legal-inquiry-triage/README.md) scenario demonstrates a general rule engine and is not legal advice or a claim that Xiaoye Radar is a lawyer-acquisition tool. Its Candidate output requires human review and must not be used for unauthorized private-data collection, credential or CAPTCHA bypass, platform access-control bypass, automated harassment, spam, or automated unsolicited messaging. It contains no automatic direct-message or bulk-contact feature. The brand name in the brand-monitoring example is fictional.
 
 ## Human review
 

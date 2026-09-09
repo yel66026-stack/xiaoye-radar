@@ -30,12 +30,10 @@ const packageVersionValue = asRecord(
 ).version
 if (typeof packageVersionValue !== 'string') throw new Error('package.json has no valid version')
 const packageVersion = packageVersionValue
-const executable = join(
-  root,
-  'release',
-  'community',
-  `Xiaoye-Radar-Community-${packageVersion}-portable-x64.exe`,
-)
+const requestedExecutable = process.env.XIAOYE_RADAR_PORTABLE_PATH?.trim()
+const executable = requestedExecutable
+  ? resolve(requestedExecutable)
+  : join(root, 'release', 'community', `Xiaoye-Radar-Community-${packageVersion}-portable-x64.exe`)
 
 if (!existsSync(executable)) throw new Error(`Portable executable not found: ${executable}`)
 
@@ -46,20 +44,24 @@ const defaultDataRoot = join(appDataRoot, 'Xiaoye Radar Community')
 const dataRoot = join(smokeRoot, 'user-data')
 const ignoredOverrideRoot = join(smokeRoot, 'packaged-override-must-not-be-used')
 const firstScreenshot = join(smokeRoot, 'dashboard-first-run.png')
+const legalScreenshot = join(smokeRoot, 'dashboard-legal-example.png')
 const reopenedScreenshot = join(smokeRoot, 'dashboard-reopened.png')
 mkdirSync(dataRoot, { recursive: true })
 
 /**
  * @param {string | null} screenshot
- * @param {boolean} autoDemo
+ * @param {'none' | 'demo' | 'legal'} workflow
+ * @param {boolean} autoReview
  * @returns {NodeJS.ProcessEnv}
  */
-function portableEnvironment(screenshot, autoDemo) {
+function portableEnvironment(screenshot, workflow, autoReview) {
   return {
     ...process.env,
     ELECTRON_RENDERER_URL: 'https://renderer-override.invalid',
     XIAOYE_RADAR_COMMUNITY_DATA_DIR: ignoredOverrideRoot,
-    XIAOYE_RADAR_AUTO_DEMO: autoDemo ? '1' : '0',
+    XIAOYE_RADAR_AUTO_DEMO: workflow === 'demo' ? '1' : '0',
+    XIAOYE_RADAR_AUTO_LEGAL_EXAMPLE: workflow === 'legal' ? '1' : '0',
+    XIAOYE_RADAR_AUTO_REVIEW: autoReview ? '1' : '0',
     ...(screenshot ? { XIAOYE_RADAR_CAPTURE_PATH: screenshot } : {}),
   }
 }
@@ -93,13 +95,14 @@ function waitForExit(child, timeoutMilliseconds, label) {
 
 /**
  * @param {string | null} [screenshot]
- * @param {boolean} [autoDemo]
+ * @param {'none' | 'demo' | 'legal'} [workflow]
+ * @param {boolean} [autoReview]
  * @returns {ChildProcessWithoutNullStreams}
  */
-function spawnPortable(screenshot = null, autoDemo = false) {
+function spawnPortable(screenshot = null, workflow = 'none', autoReview = false) {
   const child = /** @type {ChildProcessWithoutNullStreams} */ (
     spawn(executable, [], {
-      env: portableEnvironment(screenshot, autoDemo),
+      env: portableEnvironment(screenshot, workflow, autoReview),
       stdio: ['ignore', 'pipe', 'pipe'],
       windowsHide: true,
     })
@@ -110,10 +113,11 @@ function spawnPortable(screenshot = null, autoDemo = false) {
 
 /**
  * @param {string} screenshot
- * @param {boolean} autoDemo
+ * @param {'none' | 'demo' | 'legal'} workflow
+ * @param {boolean} [autoReview]
  */
-async function runPortable(screenshot, autoDemo) {
-  const child = spawnPortable(screenshot, autoDemo)
+async function runPortable(screenshot, workflow, autoReview = false) {
+  const child = spawnPortable(screenshot, workflow, autoReview)
   await waitForExit(child, 90_000, 'Portable smoke run')
 }
 
@@ -177,7 +181,7 @@ try {
   }
   symlinkSync(dataRoot, defaultDataRoot, 'junction')
   dataJunctionCreated = true
-  await runPortable(firstScreenshot, true)
+  await runPortable(firstScreenshot, 'demo')
   const ignoredWorkspace = join(ignoredOverrideRoot, 'community-workspace', 'workspace.json')
   if (existsSync(ignoredWorkspace)) {
     throw new Error('Packaged app accepted XIAOYE_RADAR_COMMUNITY_DATA_DIR')
@@ -205,7 +209,46 @@ try {
     throw new Error('Portable Demo workflow did not persist 45 candidates')
   }
 
-  await runPortable(reopenedScreenshot, true)
+  await runPortable(legalScreenshot, 'legal', true)
+  if (!existsSync(legalScreenshot) || statSync(legalScreenshot).size === 0) {
+    throw new Error('Portable Legal Inquiry Triage workflow did not render a screenshot')
+  }
+  const legalWorkspace = asRecord(JSON.parse(readFileSync(workspacePath, 'utf8')))
+  const legalRuns = Array.isArray(legalWorkspace.runs) ? legalWorkspace.runs : []
+  const legalLatest = asRecord(legalRuns[0])
+  const legalRunStats = {
+    total: 100,
+    candidates: 51,
+    duplicates: 5,
+    excluded: 18,
+    timeFiltered: 10,
+    ruleFiltered: 16,
+  }
+  if (JSON.stringify(legalLatest.stats) !== JSON.stringify(legalRunStats)) {
+    throw new Error('Portable Legal Inquiry Triage workflow returned unexpected statistics')
+  }
+  const legalCandidates = Array.isArray(legalWorkspace.candidates)
+    ? legalWorkspace.candidates
+        .map(asRecord)
+        .filter(({ ruleId }) => ruleId === 'legal-inquiry-basic')
+    : []
+  if (legalCandidates.length !== 51) {
+    throw new Error('Portable Legal Inquiry Triage workflow did not persist 51 candidates')
+  }
+  const approvedLegalCandidates = legalCandidates.filter(
+    ({ reviewStatus }) => reviewStatus === 'approved',
+  )
+  if (
+    approvedLegalCandidates.length !== 1 ||
+    approvedLegalCandidates[0]?.reviewNote !== 'Automated portable smoke verification'
+  ) {
+    throw new Error('Portable Legal Inquiry Triage review did not persist')
+  }
+  if (legalRuns.length !== 2) {
+    throw new Error('Portable Legal Inquiry Triage workflow did not append scan history')
+  }
+
+  await runPortable(reopenedScreenshot, 'legal')
   if (!existsSync(reopenedScreenshot) || statSync(reopenedScreenshot).size === 0) {
     throw new Error('Reopened portable app did not render a screenshot')
   }
@@ -213,20 +256,30 @@ try {
   const reopenedRuns = Array.isArray(reopenedWorkspace.runs) ? reopenedWorkspace.runs : []
   const reopenedLatest = asRecord(reopenedRuns[0])
   const reopenedStats = {
-    total: 80,
+    total: 100,
     candidates: 0,
-    duplicates: 50,
-    excluded: 10,
+    duplicates: 56,
+    excluded: 18,
     timeFiltered: 10,
-    ruleFiltered: 10,
+    ruleFiltered: 16,
   }
   if (JSON.stringify(reopenedLatest.stats) !== JSON.stringify(reopenedStats)) {
     throw new Error('Reopened portable app did not reuse persisted candidate fingerprints')
   }
-  if (!Array.isArray(reopenedWorkspace.candidates) || reopenedWorkspace.candidates.length !== 45) {
+  if (!Array.isArray(reopenedWorkspace.candidates) || reopenedWorkspace.candidates.length !== 96) {
     throw new Error('Reopened portable app did not preserve the candidate queue')
   }
-  if (reopenedRuns.length !== 2) {
+  if (
+    reopenedWorkspace.candidates
+      .map(asRecord)
+      .filter(
+        ({ ruleId, reviewStatus }) =>
+          ruleId === 'legal-inquiry-basic' && reviewStatus === 'approved',
+      ).length !== 1
+  ) {
+    throw new Error('Reopened portable app did not preserve the human-review decision')
+  }
+  if (reopenedRuns.length !== 3) {
     throw new Error('Reopened portable app did not preserve and append scan history')
   }
 
@@ -237,13 +290,16 @@ try {
       artifact: executable,
       sha256,
       screenshotBytes: {
-        firstRun: statSync(firstScreenshot).size,
+        demo: statSync(firstScreenshot).size,
+        legal: statSync(legalScreenshot).size,
         reopened: statSync(reopenedScreenshot).size,
       },
-      firstRun: firstRunStats,
-      reopened: reopenedStats,
-      persistedCandidates: 45,
-      persistedRuns: 2,
+      demo: firstRunStats,
+      legal: legalRunStats,
+      legalReopened: reopenedStats,
+      persistedCandidates: 96,
+      approvedLegalCandidates: 1,
+      persistedRuns: 3,
       singleInstance: true,
     }),
   )

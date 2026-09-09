@@ -4,6 +4,7 @@ import { IPC_CHANNELS, type CommunityDesktopApi } from '../shared/contracts'
 const api: CommunityDesktopApi = {
   getBootstrap: () => ipcRenderer.invoke(IPC_CHANNELS.bootstrap),
   importDemo: () => ipcRenderer.invoke(IPC_CHANNELS.importDemo),
+  importLegalInquiryExample: () => ipcRenderer.invoke(IPC_CHANNELS.importLegalInquiryExample),
   importSource: () => ipcRenderer.invoke(IPC_CHANNELS.importSource),
   saveRule: (document) => ipcRenderer.invoke(IPC_CHANNELS.saveRule, { document }),
   runMonitoring: (sourceRecordId, ruleId) =>

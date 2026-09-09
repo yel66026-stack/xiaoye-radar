@@ -332,7 +332,7 @@ export function App(): ReactNode {
         <div className="top-status">
           <span className="status-dot" aria-hidden="true" />
           <span>Community workspace ready</span>
-          <code>v{bootstrap?.appVersion ?? '0.4.0'}</code>
+          <code>v{bootstrap?.appVersion ?? '0.4.1'}</code>
         </div>
 
         {page === 'dashboard' ? (
@@ -361,6 +361,23 @@ export function App(): ReactNode {
                       <Play aria-hidden="true" />
                     )}
                     导入并运行 Demo
+                  </button>
+                  <button
+                    className="secondary-button"
+                    type="button"
+                    disabled={busy !== null}
+                    onClick={() =>
+                      void action('legal-example', () =>
+                        window.xiaoyeCommunity.importLegalInquiryExample(),
+                      )
+                    }
+                  >
+                    {busy === 'legal-example' ? (
+                      <LoaderCircle className="spin" aria-hidden="true" />
+                    ) : (
+                      <FileSearch aria-hidden="true" />
+                    )}
+                    法律求助筛选示例
                   </button>
                   <button className="secondary-button" type="button" onClick={() => go('sources')}>
                     查看数据源 <ChevronRight aria-hidden="true" />
@@ -511,7 +528,7 @@ export function App(): ReactNode {
             <PageTitle
               eyebrow="RULE ENGINE"
               title="规则库"
-              detail="规则使用 JSON 或 YAML；支持 include、exclude、时间窗、评分、来源过滤、正则与去重。"
+              detail="规则使用 JSON 或 YAML；支持 include、exclude、时间窗、评分、来源过滤与去重。Regex 当前禁用。"
             />
             <div className="rules-layout">
               <section className="section-card rule-list">
@@ -546,7 +563,7 @@ export function App(): ReactNode {
                 <div className="section-title">
                   <div>
                     <h2>规则编辑器</h2>
-                    <p>保存前会进行 schema 与正则校验。</p>
+                    <p>保存前会进行 schema 与安全限制校验。</p>
                   </div>
                   <code>YAML</code>
                 </div>

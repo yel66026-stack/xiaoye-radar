@@ -6,7 +6,7 @@
 
 Community Edition 用来处理你有权访问的公开内容副本。它可以导入 CSV、JSON、本地 RSS/Atom 文件、Markdown 和纯文本，随后执行时间过滤、关键词筛选、排除、评分与去重，再把候选内容交给人审核。整个流程在本机完成，不要求平台账号，也不调用私有服务。
 
-> 当前版本为 `v0.4.0` Community Edition。Windows 便携版目前未签名；安全问题请通过 GitHub Private Vulnerability Reporting 私密提交，不要发到公开 Issue。
+> 当前版本为 `v0.4.1` Community Edition。Windows 便携版目前未签名；安全问题请通过 GitHub Private Vulnerability Reporting 私密提交，不要发到公开 Issue。
 
 ![小夜雷达 Community 总览](docs/images/dashboard.png)
 
@@ -15,6 +15,16 @@ Community Edition 用来处理你有权访问的公开内容副本。它可以�
 很多监测项目都会重复写一段相似的中间流程。数据来自不同格式，字段要先统一；内容要按时间、关键词和来源过滤；重复结果不能一遍遍进入队列；机器给出的候选还得留给人确认。Community Edition 把这段通用工作整理成一个能直接运行的桌面应用，也把关键能力拆成几个清楚的 TypeScript workspace。
 
 这个版本可以独立使用。它没有 Pro License 检查、私有 API、账号登录、遥测和自动更新。
+
+## 使用场景
+
+- 使用全虚构或依法取得的文本做[法律求助内容筛选](examples/legal-inquiry-triage/README.md)
+- [客户反馈](examples/customer-feedback/README.md)审核
+- 对授权数据源做[品牌监测](examples/brand-monitoring/README.md)
+- 本地 RSS/Atom 监测
+- 遵守授权边界的自定义 Source Adapter
+
+这些场景共用同一条来源无关的数据管线，不会把小夜雷达变成平台爬虫，也不会取消最终的人工审核。
 
 ## 已有能力
 
@@ -25,7 +35,7 @@ Community Edition 用来处理你有权访问的公开内容副本。它可以�
 - 串行原子写入的本地 JSON 工作区
 - 待审核、已通过、已排除、已归档四种审核状态
 - CSV 与 JSON 导出，CSV 会处理电子表格公式注入
-- 80 条全虚构 Demo，以及法律、客户反馈、品牌和招聘示例
+- 80 条全虚构通用 Demo、经过测试的 100 条法律求助筛选流程，以及其他场景示例
 - Electron 安全 Preload、IPC sender 校验、沙箱与严格 CSP
 - 中英双语桌面界面和英文开发文档
 
@@ -100,14 +110,14 @@ deduplication: content
 
 ## Source Adapter SDK
 
-每个来源都遵循 `initialize`、`validateConfig`、`fetch`、`normalize`、`healthCheck` 和 `dispose` 生命周期。`v0.4.0` 内置的是本地文件 Adapter，workspace 包还没有宣称发布到 npm。第三方 Adapter 的接口、错误处理和测试方法见 [docs/source-adapter.md](docs/source-adapter.md)。
+每个来源都遵循 `initialize`、`validateConfig`、`fetch`、`normalize`、`healthCheck` 和 `dispose` 生命周期。`v0.4.1` 内置的是本地文件 Adapter，workspace 包还没有宣称发布到 npm。第三方 Adapter 的接口、错误处理和测试方法见 [docs/source-adapter.md](docs/source-adapter.md)。
 
 Community 不包含网页抓取器、验证码绕过、凭据收集、认证绕过和平台风控规避实现。
 
 ## 示例
 
 - [完整 Demo](examples/demo-monitoring/README.md)
-- [法律求助分流](examples/legal-lead-triage/README.md)，只是一份虚构的规则引擎示例
+- [法律求助内容筛选](examples/legal-inquiry-triage/README.md)，包含 100 条全虚构数据、基础规则包和固定回归测试
 - [客户反馈](examples/customer-feedback/README.md)
 - [品牌监测](examples/brand-monitoring/README.md)，品牌名称为虚构
 - [招聘信息](examples/recruitment-monitoring/README.md)
@@ -143,4 +153,4 @@ Community 使用独立本地目录，不读写 Pro 数据。Telemetry 与自动�
 
 ## 路线与许可证
 
-版本规划见 [ROADMAP.md](ROADMAP.md)，首发变化和限制见 [`v0.4.0` Release Notes](docs/RELEASE_NOTES_v0.4.0.md)。项目使用 Apache License 2.0，第三方信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+版本规划见 [ROADMAP.md](ROADMAP.md)，本次变化和限制见 [`v0.4.1` Release Notes](docs/RELEASE_NOTES_v0.4.1.md)。项目使用 Apache License 2.0，第三方信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

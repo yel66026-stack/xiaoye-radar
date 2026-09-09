@@ -52,7 +52,7 @@ deduplication: content
 | `include`          | At least one term must match when the list is non-empty.                            |
 | `exclude`          | Any matching term excludes the item before scoring.                                 |
 | `text_contains`    | A second optional contains gate; at least one must match.                           |
-| `regex`            | Reserved; any non-empty value is rejected in `v0.4.0`.                              |
+| `regex`            | Reserved; any non-empty value is rejected in the current release.                   |
 | `score`            | Per-term integer weights from -100 to 100.                                          |
 | `basic_score`      | Starting score from 0 to 100.                                                       |
 | `minimum_score`    | Minimum final score from 0 to 100.                                                  |
@@ -110,7 +110,7 @@ Items with no valid `publishedAt` fail a configured time window. Timestamps over
 
 ## Safety and performance
 
-Rule documents are capped at 100,000 characters by desktop IPC and YAML aliases are limited. A non-empty `regex` field is rejected before save, rejected when a stored workspace is parsed, and rejected defensively by the engine. No user-supplied regular expression executes in the Electron main process in `v0.4.0`. Regex support may return only after worker or process isolation provides a tested hard execution timeout.
+Rule documents are capped at 100,000 characters by desktop IPC and YAML aliases are limited. A non-empty `regex` field is rejected before save, rejected when a stored workspace is parsed, and rejected defensively by the engine. No user-supplied regular expression executes in the Electron main process in the current release. Regex support may return only after worker or process isolation provides a tested hard execution timeout.
 
 ## Testing a rule
 
