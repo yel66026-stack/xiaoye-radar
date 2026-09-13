@@ -34,7 +34,7 @@
   "dependencies": {
     "csv-parse": "7.0.2",
     "fast-xml-parser": "5.11.1",
-    "lucide-react": "1.40.0",
+    "lucide-react": "1.43.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "yaml": "2.9.0",
