@@ -50,6 +50,9 @@ export class JsonFileStorage {
       name: string
       adapterKind: SourceRecord['adapterKind']
       fileName: string
+      health?: SourceRecord['health']
+      healthMessage?: string
+      healthCheckedAt?: string | null
     },
     items: NormalizedContent[],
   ): Promise<SourceRecord> {
@@ -67,7 +70,9 @@ export class JsonFileStorage {
         adapterKind: input.adapterKind,
         itemCount: items.length,
         importedAt: new Date().toISOString(),
-        health: 'healthy',
+        health: input.health ?? 'healthy',
+        healthMessage: input.healthMessage ?? 'Source imported successfully.',
+        healthCheckedAt: input.healthCheckedAt ?? null,
         fileName: basename(input.fileName),
       })
       await this.#writeJson(join(this.#sourcesPath, `${id}.json`), sourceItemsSchema.parse(items))

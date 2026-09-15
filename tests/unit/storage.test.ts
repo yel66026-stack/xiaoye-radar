@@ -1,4 +1,4 @@
-import { mkdtemp, rm } from 'node:fs/promises'
+import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
@@ -27,6 +27,39 @@ afterEach(async () => {
 })
 
 describe('JsonFileStorage', () => {
+  it('loads version 1 source records created before adapter diagnostics existed', async () => {
+    const storage = await storageFixture()
+    await writeFile(
+      join(storage.rootPath, 'workspace.json'),
+      JSON.stringify({
+        schemaVersion: 1,
+        sources: [
+          {
+            id: 'legacy-source',
+            name: 'Legacy source',
+            adapterKind: 'json',
+            itemCount: 1,
+            importedAt: '2026-09-09T00:00:00.000Z',
+            health: 'healthy',
+            fileName: 'legacy.json',
+          },
+        ],
+        rules: [],
+        jobs: [],
+        candidates: [],
+        runs: [],
+      }),
+      'utf8',
+    )
+
+    const state = await storage.read()
+    expect(state.schemaVersion).toBe(1)
+    expect(state.sources[0]).toMatchObject({
+      healthMessage: 'Source imported successfully.',
+      healthCheckedAt: null,
+    })
+  })
+
   it('saves and loads normalized source content', async () => {
     const storage = await storageFixture()
     const item = normalizedContentSchema.parse({

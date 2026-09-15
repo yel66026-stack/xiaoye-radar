@@ -1,25 +1,51 @@
-import { readFile } from 'node:fs/promises'
-import { XMLParser } from 'fast-xml-parser'
+import { XMLParser, XMLValidator } from 'fast-xml-parser'
 import type { NormalizedContent } from '@xiaoye-radar/core'
 import { FileAdapterBase } from '../file-adapter-base'
-import { asArray, asRecord, firstValue, normalizeRecord, stringValue } from '../helpers'
+import {
+  asArray,
+  asRecord,
+  firstValue,
+  normalizeRecord,
+  readUtf8SourceFile,
+  SourceAdapterError,
+  stringValue,
+  throwInvalidSourceContent,
+} from '../helpers'
 
 export class RssSourceAdapter extends FileAdapterBase {
   readonly kind = 'rss'
 
   async fetch(): Promise<NormalizedContent[]> {
     const config = this.requireConfig()
-    const xml = await readFile(config.path, 'utf8')
-    const parsed = asRecord(
-      new XMLParser({ ignoreAttributes: false, processEntities: false, trimValues: true }).parse(
-        xml,
-      ),
-    )
-    const rssItems = asRecord(asRecord(parsed.rss).channel).item
-    const atomEntries = asRecord(parsed.feed).entry
-    const items = asArray(rssItems ?? atomEntries)
-    if (items.length === 0) throw new Error('RSS or Atom source contains no entries')
-    return items.map((item, index) => this.normalize(item, index))
+    try {
+      const xml = await readUtf8SourceFile(config.path)
+      if (XMLValidator.validate(xml) !== true) {
+        throw new SourceAdapterError(
+          'invalid-content',
+          'The RSS or Atom source is malformed. Check its XML syntax and retry.',
+        )
+      }
+      const parsed = asRecord(
+        new XMLParser({ ignoreAttributes: false, processEntities: false, trimValues: true }).parse(
+          xml,
+        ),
+      )
+      const rssItems = asRecord(asRecord(parsed.rss).channel).item
+      const atomEntries = asRecord(parsed.feed).entry
+      const items = asArray(rssItems ?? atomEntries)
+      if (items.length === 0) {
+        throw new SourceAdapterError(
+          'invalid-content',
+          'The RSS or Atom source contains no entries. Add at least one item or entry and retry.',
+        )
+      }
+      return items.map((item, index) => this.normalize(item, index))
+    } catch (error) {
+      throwInvalidSourceContent(
+        error,
+        'The RSS or Atom source is malformed. Check its XML syntax and retry.',
+      )
+    }
   }
 
   normalize(rawValue: unknown, index: number): NormalizedContent {

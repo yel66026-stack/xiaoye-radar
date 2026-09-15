@@ -305,6 +305,15 @@ p {
   box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.1);
 }
 
+.source-health.error {
+  color: #fda4af;
+}
+
+.source-health.error .health-dot {
+  background: #fb7185;
+  box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.1);
+}
+
 .hero-panel {
   position: relative;
   display: grid;
@@ -757,6 +766,14 @@ p {
   font-size: 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.source-copy .source-diagnostic {
+  margin-top: 8px;
+  color: #a8b6c8;
+  line-height: 1.45;
+  text-overflow: clip;
+  white-space: normal;
 }
 
 .source-card dl {

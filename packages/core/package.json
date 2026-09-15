@@ -1,6 +1,6 @@
 {
   "name": "@xiaoye-radar/core",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Source-neutral monitoring and rule evaluation core for Xiaoye Radar.",
   "type": "module",
   "license": "Apache-2.0",

@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-09-15
+
+### Added
+
+- Source cards now show the latest successful adapter diagnostic and normalized item count.
+- Regression coverage for empty, malformed, invalid-UTF-8, missing, unsupported, and oversized source files, including the exact 10 MiB boundary.
+- Windows 10/11 x64 download, unsigned-publisher warning, and SHA-256 verification instructions.
+
+### Changed
+
+- Updated `eslint` from 10.9.1 to 10.10.0 and `lucide-react` from 1.40.0 to 1.43.0 after CI and local compatibility checks.
+- Source records gain backward-compatible diagnostic defaults without changing workspace schema version 1.
+
+### Fixed
+
+- Import failures now return short, actionable messages while suppressing local paths, raw records, parser details, and unexpected exception text at the UI boundary.
+- CSV, JSON, RSS/Atom, Markdown, and text imports now reject invalid UTF-8 consistently.
+
 ## [0.4.1] - 2026-09-09
 
 ### Added
@@ -60,6 +78,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 No earlier Community version is claimed. The private Pro product has a separate version history that is not copied into this public repository.
 
-[unreleased]: https://github.com/yel66026-stack/xiaoye-radar/compare/v0.4.1...HEAD
+[unreleased]: https://github.com/yel66026-stack/xiaoye-radar/compare/v0.4.2...HEAD
+[0.4.2]: https://github.com/yel66026-stack/xiaoye-radar/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/yel66026-stack/xiaoye-radar/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/yel66026-stack/xiaoye-radar/releases/tag/v0.4.0

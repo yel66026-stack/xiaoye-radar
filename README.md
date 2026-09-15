@@ -6,7 +6,7 @@
 
 Xiaoye Radar Community turns authorized, public-content exports into a local review workflow. Import CSV, JSON, RSS/Atom, Markdown, or text files; apply source-neutral rules; remove duplicates; review candidates; and export the result without signing in to a platform or calling a private service.
 
-> Status: `v0.4.1` Community Edition. Windows portable builds are currently unsigned. Security reports use GitHub Private Vulnerability Reporting rather than public issues.
+> Status: `v0.4.2` Community Edition. Windows portable builds are currently unsigned. Security reports use GitHub Private Vulnerability Reporting rather than public issues.
 
 ![Xiaoye Radar Community dashboard](docs/images/dashboard.png)
 
@@ -31,7 +31,7 @@ These are examples of the same source-neutral pipeline. None changes Xiaoye Rada
 - Configurable include, exclude, text-contains, source, time-window, score, priority, and enabled-state rules
 - SHA-256 deduplication by content, source ID, or URL, scoped to a semantic rule revision
 - CSV, JSON, local RSS/Atom file, Markdown, and text adapters
-- Strict normalization with nested sensitive-metadata removal and a 10 MiB source-file limit
+- Actionable path-free import errors, adapter health diagnostics, strict normalization, nested sensitive-metadata removal, and a 10 MiB source-file limit
 - Local JSON workspace with serialized atomic writes
 - Pending, approved, rejected, and archived review states
 - CSV and JSON export with spreadsheet-formula injection protection
@@ -86,6 +86,18 @@ npm run dev
 ```
 
 The install and development commands do not need a private registry or secret.
+
+### Verify the Windows download
+
+Download the portable `.exe` and matching `.sha256` file from the same [GitHub Release](https://github.com/yel66026-stack/xiaoye-radar/releases). In PowerShell, run:
+
+```powershell
+$expected = (Get-Content .\Xiaoye-Radar-Community-0.4.2-portable-x64.exe.sha256).Split()[0]
+$actual = (Get-FileHash .\Xiaoye-Radar-Community-0.4.2-portable-x64.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($actual -ne $expected) { throw 'SHA-256 mismatch' }
+```
+
+The build supports Windows 10 and 11 x64 and is not Authenticode-signed. Windows SmartScreen may therefore show an unknown-publisher or reputation warning. Continue only when the file came from the official release and its SHA-256 matches; do not disable Windows security controls.
 
 ### Verify and package
 
@@ -157,7 +169,7 @@ export interface SourceAdapter<TConfig = unknown, TRaw = unknown> {
 }
 ```
 
-The Community release ships file-based adapters. It deliberately does not ship a crawler, CAPTCHA workaround, credential collector, or authentication bypass. The workspace packages are source workspaces in `v0.4.1`; they are not claimed as published npm packages. See [docs/source-adapter.md](docs/source-adapter.md).
+The Community release ships file-based adapters. It deliberately does not ship a crawler, CAPTCHA workaround, credential collector, or authentication bypass. The workspace packages are source workspaces in `v0.4.2`; they are not claimed as published npm packages. See [docs/source-adapter.md](docs/source-adapter.md).
 
 ## Examples
 
@@ -193,7 +205,7 @@ No Pro source, platform selector, account state, customer data, or commercial ru
 
 The roadmap is directional and does not promise unapproved commercial features. See [ROADMAP.md](ROADMAP.md).
 
-Release changes and current limitations are recorded in [CHANGELOG.md](CHANGELOG.md) and the [`v0.4.1` release notes](docs/RELEASE_NOTES_v0.4.1.md).
+Release changes and current limitations are recorded in [CHANGELOG.md](CHANGELOG.md) and the [`v0.4.2` release notes](docs/RELEASE_NOTES_v0.4.2.md).
 
 ## Contributing
 

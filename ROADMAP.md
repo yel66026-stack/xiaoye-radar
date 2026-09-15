@@ -9,7 +9,7 @@ This roadmap describes likely Community work. It is directional rather than a pr
 - add more schema and malformed-file fixtures
 - document release verification and supported Windows versions
 - establish a supported security-reporting channel
-- `v0.4.1` target: evaluate restoring regular-expression rules only with worker or process isolation and a hard time budget
+- `v0.4.x` target: evaluate restoring regular-expression rules only with worker or process isolation and a hard time budget
 
 ## v0.5.0: formalize the Source Adapter SDK
 

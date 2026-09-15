@@ -1,9 +1,61 @@
 import { createHash } from 'node:crypto'
-import { stat } from 'node:fs/promises'
+import { readFile, stat } from 'node:fs/promises'
 import { basename } from 'node:path'
 import { normalizedContentSchema, type NormalizedContent } from '@xiaoye-radar/core'
 
 export const MAX_SOURCE_BYTES = 10 * 1024 * 1024
+
+export type SourceAdapterErrorCode =
+  | 'empty'
+  | 'invalid-content'
+  | 'invalid-encoding'
+  | 'not-file'
+  | 'not-found'
+  | 'oversized'
+  | 'unreadable'
+  | 'unsupported'
+
+export class SourceAdapterError extends Error {
+  readonly code: SourceAdapterErrorCode
+
+  constructor(code: SourceAdapterErrorCode, message: string) {
+    super(message)
+    this.name = 'SourceAdapterError'
+    this.code = code
+  }
+}
+
+const UNKNOWN_IMPORT_ERROR =
+  'The selected source could not be imported. Check that it is a supported, valid text file and try again.'
+
+export function safeSourceImportMessage(error: unknown): string {
+  return error instanceof SourceAdapterError ? error.message : UNKNOWN_IMPORT_ERROR
+}
+
+export function throwInvalidSourceContent(error: unknown, message: string): never {
+  if (error instanceof SourceAdapterError) throw error
+  throw new SourceAdapterError('invalid-content', message)
+}
+
+function sourceAccessError(error: unknown): SourceAdapterError {
+  const code = (error as NodeJS.ErrnoException | null)?.code
+  if (code === 'ENOENT') {
+    return new SourceAdapterError(
+      'not-found',
+      'The selected source file could not be found. Choose it again and retry.',
+    )
+  }
+  if (code === 'EACCES' || code === 'EPERM') {
+    return new SourceAdapterError(
+      'unreadable',
+      'The selected source file cannot be read. Check its permissions and retry.',
+    )
+  }
+  return new SourceAdapterError(
+    'unreadable',
+    'The selected source file could not be read. Close any app locking it and retry.',
+  )
+}
 
 export type UnknownRecord = Record<string, unknown>
 
@@ -145,9 +197,53 @@ export async function validateReadableFile(
   path: string,
   maximum = MAX_SOURCE_BYTES,
 ): Promise<void> {
-  const info = await stat(path)
-  if (!info.isFile()) throw new Error('Source path must point to a file')
-  if (info.size > maximum) throw new Error(`Source file exceeds the ${maximum} byte limit`)
+  let info
+  try {
+    info = await stat(path)
+  } catch (error) {
+    throw sourceAccessError(error)
+  }
+  if (!info.isFile()) {
+    throw new SourceAdapterError('not-file', 'The selected source must be a file, not a folder.')
+  }
+  if (info.size === 0) {
+    throw new SourceAdapterError(
+      'empty',
+      'The selected source file is empty. Add content and retry.',
+    )
+  }
+  if (info.size > maximum) {
+    throw new SourceAdapterError(
+      'oversized',
+      `The selected source is larger than the ${String(maximum / 1024 / 1024)} MiB import limit.`,
+    )
+  }
+}
+
+export async function readUtf8SourceFile(path: string): Promise<string> {
+  let bytes: Buffer
+  try {
+    bytes = await readFile(path)
+  } catch (error) {
+    throw sourceAccessError(error)
+  }
+
+  let text: string
+  try {
+    text = new TextDecoder('utf-8', { fatal: true }).decode(bytes)
+  } catch {
+    throw new SourceAdapterError(
+      'invalid-encoding',
+      'The selected source is not valid UTF-8 text. Save it as UTF-8 and retry.',
+    )
+  }
+  if (!text.trim()) {
+    throw new SourceAdapterError(
+      'empty',
+      'The selected source file is empty. Add content and retry.',
+    )
+  }
+  return text
 }
 
 export function defaultSourceName(path: string): string {

@@ -4,7 +4,7 @@
 
 The Source Adapter SDK converts an authorized source into the stable `NormalizedContent` model. An adapter obtains input and understands its native fields. It does not score candidates, decide review status, write the workspace, or bypass a source's controls.
 
-The `v0.4.1` packages are source workspaces inside this monorepo. They are not yet advertised as published npm packages.
+The `v0.4.2` packages are source workspaces inside this monorepo. They are not yet advertised as published npm packages.
 
 ## Interface
 
@@ -41,7 +41,7 @@ interface NormalizedContent {
 
 1. `validateConfig` returns all configuration problems without opening the source.
 2. `initialize` validates configuration, verifies access and allocates resources.
-3. `healthCheck` reports whether the initialized adapter can currently read its source.
+3. `healthCheck` reports whether the initialized adapter can currently read its source without returning its local path.
 4. `fetch` reads and returns a normalized batch.
 5. `normalize` converts one raw record and is directly testable.
 6. `dispose` closes handles and clears local state, including after failure.
@@ -152,7 +152,8 @@ export class ExampleAdapter implements SourceAdapter<
 
 ## Error handling
 
-- Throw a short, actionable `Error` for an operation that cannot continue.
+- Throw a short, actionable `SourceAdapterError` for an operation that cannot continue. Built-in codes distinguish empty, malformed, invalid-encoding, missing, unreadable, oversized, and unsupported input.
+- At the UI or IPC boundary, pass unknown errors through `safeSourceImportMessage`; it preserves approved adapter messages and replaces unexpected details with a generic retry instruction.
 - Do not include credentials, full records, authorization headers, cookies, or tokens in messages.
 - Treat malformed source records as invalid input. Do not invent missing identifiers, authors, dates, or URLs unless the adapter's documented normalization policy defines a deterministic fallback.
 - Put retry and rate policy in the adapter or host integration, never in the Rule Engine.
