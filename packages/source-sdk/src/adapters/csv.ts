@@ -1,9 +1,13 @@
-import { readFile } from 'node:fs/promises'
 import { parse } from 'csv-parse/sync'
 import type { NormalizedContent } from '@xiaoye-radar/core'
 import { z } from 'zod'
 import { FileAdapterBase, fileAdapterConfigSchema } from '../file-adapter-base'
-import { normalizeRecord, type UnknownRecord } from '../helpers'
+import {
+  normalizeRecord,
+  readUtf8SourceFile,
+  throwInvalidSourceContent,
+  type UnknownRecord,
+} from '../helpers'
 import type { AdapterValidation } from '../types'
 
 export interface CsvAdapterConfig {
@@ -37,15 +41,22 @@ export class CsvSourceAdapter extends FileAdapterBase<CsvAdapterConfig> {
 
   async fetch(): Promise<NormalizedContent[]> {
     const config = this.requireConfig()
-    const text = await readFile(config.path, 'utf8')
-    const rows: UnknownRecord[] = parse(text, {
-      bom: true,
-      columns: true,
-      skip_empty_lines: true,
-      skip_records_with_empty_values: true,
-      trim: true,
-    })
-    return rows.map((row, index) => this.normalize(row, index))
+    try {
+      const text = await readUtf8SourceFile(config.path)
+      const rows: UnknownRecord[] = parse(text, {
+        bom: true,
+        columns: true,
+        skip_empty_lines: true,
+        skip_records_with_empty_values: true,
+        trim: true,
+      })
+      return rows.map((row, index) => this.normalize(row, index))
+    } catch (error) {
+      throwInvalidSourceContent(
+        error,
+        'The CSV source is malformed. Check its header and row quoting, then retry.',
+      )
+    }
   }
 
   normalize(raw: UnknownRecord, index: number): NormalizedContent {

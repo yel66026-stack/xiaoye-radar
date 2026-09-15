@@ -1,20 +1,19 @@
 import { createHash } from 'node:crypto'
-import { readFile } from 'node:fs/promises'
 import { basename } from 'node:path'
 import { normalizedContentSchema, type NormalizedContent } from '@xiaoye-radar/core'
 import { FileAdapterBase } from '../file-adapter-base'
+import { readUtf8SourceFile } from '../helpers'
 
 export class LocalFileSourceAdapter extends FileAdapterBase {
   readonly kind = 'local-file'
 
   async fetch(): Promise<NormalizedContent[]> {
     const config = this.requireConfig()
-    const text = await readFile(config.path, 'utf8')
+    const text = await readUtf8SourceFile(config.path)
     const blocks = text
       .split(/\r?\n\s*\r?\n/gu)
       .map((block) => block.trim())
       .filter(Boolean)
-    if (blocks.length === 0) throw new Error('Local text source is empty')
     return blocks.map((block, index) => this.normalize(block, index))
   }
 

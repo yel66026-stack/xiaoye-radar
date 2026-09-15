@@ -6,7 +6,7 @@
 
 Community Edition 用来处理你有权访问的公开内容副本。它可以导入 CSV、JSON、本地 RSS/Atom 文件、Markdown 和纯文本，随后执行时间过滤、关键词筛选、排除、评分与去重，再把候选内容交给人审核。整个流程在本机完成，不要求平台账号，也不调用私有服务。
 
-> 当前版本为 `v0.4.1` Community Edition。Windows 便携版目前未签名；安全问题请通过 GitHub Private Vulnerability Reporting 私密提交，不要发到公开 Issue。
+> 当前版本为 `v0.4.2` Community Edition。Windows 便携版目前未签名；安全问题请通过 GitHub Private Vulnerability Reporting 私密提交，不要发到公开 Issue。
 
 ![小夜雷达 Community 总览](docs/images/dashboard.png)
 
@@ -31,7 +31,7 @@ Community Edition 用来处理你有权访问的公开内容副本。它可以�
 - Include、Exclude、Text Contains、来源、时间窗、评分、优先级和启停规则
 - 按正文、来源 ID 或 URL 生成 SHA-256 指纹，并按规则语义修订进行去重
 - CSV、JSON、本地 RSS/Atom、Markdown 和文本 Adapter
-- 严格字段归一化，递归删除敏感 metadata，单文件上限 10 MiB
+- 不暴露本地路径的可操作导入错误、Adapter 健康诊断、严格字段归一化、递归删除敏感 metadata，以及 10 MiB 单文件上限
 - 串行原子写入的本地 JSON 工作区
 - 待审核、已通过、已排除、已归档四种审核状态
 - CSV 与 JSON 导出，CSV 会处理电子表格公式注入
@@ -53,6 +53,18 @@ npm run dev
 ```
 
 这些命令不需要私有 npm 源或 Secret。
+
+### 核验 Windows 下载版
+
+请从同一个 [GitHub Release](https://github.com/yel66026-stack/xiaoye-radar/releases) 下载便携版 `.exe` 和对应 `.sha256` 文件，然后在 PowerShell 中运行：
+
+```powershell
+$expected = (Get-Content .\Xiaoye-Radar-Community-0.4.2-portable-x64.exe.sha256).Split()[0]
+$actual = (Get-FileHash .\Xiaoye-Radar-Community-0.4.2-portable-x64.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($actual -ne $expected) { throw 'SHA-256 mismatch' }
+```
+
+发行包支持 Windows 10/11 x64，目前没有 Authenticode 数字签名，因此 Windows SmartScreen 可能显示“未知发布者”或信誉提示。只有在文件来自官方 Release 且 SHA-256 完全一致时才继续运行；不要关闭 Windows 安全防护。
 
 完整检查与 Windows 打包命令如下。
 
@@ -110,7 +122,7 @@ deduplication: content
 
 ## Source Adapter SDK
 
-每个来源都遵循 `initialize`、`validateConfig`、`fetch`、`normalize`、`healthCheck` 和 `dispose` 生命周期。`v0.4.1` 内置的是本地文件 Adapter，workspace 包还没有宣称发布到 npm。第三方 Adapter 的接口、错误处理和测试方法见 [docs/source-adapter.md](docs/source-adapter.md)。
+每个来源都遵循 `initialize`、`validateConfig`、`fetch`、`normalize`、`healthCheck` 和 `dispose` 生命周期。`v0.4.2` 内置的是本地文件 Adapter，workspace 包还没有宣称发布到 npm。第三方 Adapter 的接口、错误处理和测试方法见 [docs/source-adapter.md](docs/source-adapter.md)。
 
 Community 不包含网页抓取器、验证码绕过、凭据收集、认证绕过和平台风控规避实现。
 
@@ -153,4 +165,4 @@ Community 使用独立本地目录，不读写 Pro 数据。Telemetry 与自动�
 
 ## 路线与许可证
 
-版本规划见 [ROADMAP.md](ROADMAP.md)，本次变化和限制见 [`v0.4.1` Release Notes](docs/RELEASE_NOTES_v0.4.1.md)。项目使用 Apache License 2.0，第三方信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+版本规划见 [ROADMAP.md](ROADMAP.md)，本次变化和限制见 [`v0.4.2` Release Notes](docs/RELEASE_NOTES_v0.4.2.md)。项目使用 Apache License 2.0，第三方信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

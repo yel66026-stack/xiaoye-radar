@@ -3,6 +3,7 @@ import { CsvSourceAdapter } from './adapters/csv'
 import { JsonSourceAdapter } from './adapters/json'
 import { LocalFileSourceAdapter } from './adapters/local-file'
 import { RssSourceAdapter } from './adapters/rss'
+import { SourceAdapterError } from './helpers'
 import type { SourceAdapter } from './types'
 
 export function adapterForPath(path: string): SourceAdapter {
@@ -19,7 +20,10 @@ export function adapterForPath(path: string): SourceAdapter {
     case '.txt':
       return new LocalFileSourceAdapter()
     default:
-      throw new Error('Unsupported source type. Use CSV, JSON, RSS/Atom, Markdown, or text.')
+      throw new SourceAdapterError(
+        'unsupported',
+        'Unsupported source type. Choose a CSV, JSON, RSS/Atom, Markdown, or text file.',
+      )
   }
 }
 

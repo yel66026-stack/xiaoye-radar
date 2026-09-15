@@ -14,6 +14,8 @@ export const sourceRecordSchema = z
     itemCount: z.number().int().nonnegative(),
     importedAt: z.string().datetime({ offset: true }),
     health: z.enum(['healthy', 'error']).default('healthy'),
+    healthMessage: z.string().min(1).max(240).default('Source imported successfully.'),
+    healthCheckedAt: z.string().datetime({ offset: true }).nullable().default(null),
     fileName: z.string().min(1).max(260),
   })
   .strict()

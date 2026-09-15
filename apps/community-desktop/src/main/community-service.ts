@@ -9,7 +9,11 @@ import {
   type ScanRun,
 } from '@xiaoye-radar/core'
 import { reviewCandidate } from '@xiaoye-radar/review-engine'
-import { adapterForPath } from '@xiaoye-radar/source-sdk'
+import {
+  adapterForPath,
+  safeSourceImportMessage,
+  SourceAdapterError,
+} from '@xiaoye-radar/source-sdk'
 import {
   monitoringJobSchema,
   type JsonFileStorage,
@@ -63,18 +67,28 @@ export class CommunityService {
     try {
       await adapter.initialize({ path, sourceName: options.sourceName })
       const health = await adapter.healthCheck()
-      if (!health.healthy) throw new Error(health.message)
+      if (!health.healthy) throw new SourceAdapterError('unreadable', health.message)
       const items = await adapter.fetch()
-      if (items.length === 0) throw new Error('The source did not produce any content items')
+      if (items.length === 0) {
+        throw new SourceAdapterError(
+          'invalid-content',
+          'The selected source contains no content items. Add at least one record and retry.',
+        )
+      }
       await this.#storage.upsertSource(
         {
           id: options.id,
           name: options.sourceName ?? basename(path).replace(/\.[^.]+$/u, ''),
           adapterKind: adapterKind(adapter.kind),
           fileName: basename(path),
+          health: 'healthy',
+          healthMessage: `${adapter.kind.toUpperCase()} adapter check passed; ${String(items.length)} item${items.length === 1 ? '' : 's'} normalized.`,
+          healthCheckedAt: new Date().toISOString(),
         },
         items,
       )
+    } catch (error) {
+      throw new Error(safeSourceImportMessage(error), { cause: error })
     } finally {
       await adapter.dispose()
     }

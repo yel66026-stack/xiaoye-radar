@@ -49,6 +49,36 @@ afterEach(async () => {
 })
 
 describe('CommunityService monitoring history and deduplication', () => {
+  it('stores a sanitized adapter diagnostic after a successful import', async () => {
+    const { directory, service } = await serviceFixture()
+    const path = join(directory, 'import.json')
+    await writeFile(path, JSON.stringify([item('imported-item')]), 'utf8')
+
+    await service.importFile(path, { sourceName: 'Imported fixture' })
+
+    const source = (await service.state()).sources.find(({ name }) => name === 'Imported fixture')
+    expect(source).toMatchObject({
+      adapterKind: 'json',
+      fileName: 'import.json',
+      health: 'healthy',
+      healthMessage: 'JSON adapter check passed; 1 item normalized.',
+    })
+    expect(Date.parse(source!.healthCheckedAt!)).not.toBeNaN()
+    expect(source!.healthMessage).not.toContain(directory)
+  })
+
+  it('returns a path-free actionable error for a malformed import', async () => {
+    const { directory, service } = await serviceFixture()
+    const path = join(directory, 'PRIVATE_PATH_MARKER.json')
+    await writeFile(path, '{"PRIVATE_CONTENT_MARKER":', 'utf8')
+
+    await expect(service.importFile(path)).rejects.toThrow(
+      'The JSON source is malformed. Check its syntax and retry.',
+    )
+    await expect(service.importFile(path)).rejects.not.toThrow(directory)
+    await expect(service.importFile(path)).rejects.not.toThrow('PRIVATE_CONTENT_MARKER')
+  })
+
   it('deduplicates the same content for the same source and rule across runs', async () => {
     const { service } = await serviceFixture()
     await service.saveRule(ruleDocument('rule-a'))

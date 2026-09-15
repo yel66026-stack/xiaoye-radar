@@ -1,8 +1,13 @@
-import { readFile } from 'node:fs/promises'
 import type { NormalizedContent } from '@xiaoye-radar/core'
 import { z } from 'zod'
 import { FileAdapterBase, fileAdapterConfigSchema } from '../file-adapter-base'
-import { asRecord, normalizeRecord } from '../helpers'
+import {
+  asRecord,
+  normalizeRecord,
+  readUtf8SourceFile,
+  SourceAdapterError,
+  throwInvalidSourceContent,
+} from '../helpers'
 import type { AdapterValidation } from '../types'
 
 export interface JsonAdapterConfig {
@@ -40,12 +45,20 @@ export class JsonSourceAdapter extends FileAdapterBase<JsonAdapterConfig> {
 
   async fetch(): Promise<NormalizedContent[]> {
     const config = this.requireConfig()
-    const parsed: unknown = JSON.parse(await readFile(config.path, 'utf8'))
-    const value = config.itemsProperty ? asRecord(parsed)[config.itemsProperty] : parsed
-    const items = Array.isArray(value) ? value : asRecord(value).items
-    if (!Array.isArray(items))
-      throw new Error('JSON source must be an array or contain an items array')
-    return items.map((item, index) => this.normalize(item, index))
+    try {
+      const parsed: unknown = JSON.parse(await readUtf8SourceFile(config.path))
+      const value = config.itemsProperty ? asRecord(parsed)[config.itemsProperty] : parsed
+      const items = Array.isArray(value) ? value : asRecord(value).items
+      if (!Array.isArray(items)) {
+        throw new SourceAdapterError(
+          'invalid-content',
+          'The JSON source must be an array or contain an items array.',
+        )
+      }
+      return items.map((item, index) => this.normalize(item, index))
+    } catch (error) {
+      throwInvalidSourceContent(error, 'The JSON source is malformed. Check its syntax and retry.')
+    }
   }
 
   normalize(raw: unknown, index: number): NormalizedContent {

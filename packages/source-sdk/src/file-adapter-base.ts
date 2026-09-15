@@ -1,6 +1,5 @@
-import { access } from 'node:fs/promises'
 import { z } from 'zod'
-import { defaultSourceName, validateReadableFile } from './helpers'
+import { defaultSourceName, safeSourceImportMessage, validateReadableFile } from './helpers'
 import type { AdapterHealth, AdapterValidation, FileAdapterConfig } from './types'
 
 export const fileAdapterConfigSchema = z
@@ -42,11 +41,14 @@ export abstract class FileAdapterBase<TConfig extends FileAdapterConfig = FileAd
     const checkedAt = new Date().toISOString()
     try {
       const config = this.requireConfig()
-      await access(config.path)
       await validateReadableFile(config.path)
-      return { healthy: true, message: 'Source file is readable', checkedAt }
+      return {
+        healthy: true,
+        message: 'File is readable and within the 10 MiB import limit.',
+        checkedAt,
+      }
     } catch (error) {
-      return { healthy: false, message: (error as Error).message, checkedAt }
+      return { healthy: false, message: safeSourceImportMessage(error), checkedAt }
     }
   }
 

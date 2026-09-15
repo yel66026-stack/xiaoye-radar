@@ -332,7 +332,7 @@ export function App(): ReactNode {
         <div className="top-status">
           <span className="status-dot" aria-hidden="true" />
           <span>Community workspace ready</span>
-          <code>v{bootstrap?.appVersion ?? '0.4.1'}</code>
+          <code>v{bootstrap?.appVersion ?? '0.4.2'}</code>
         </div>
 
         {page === 'dashboard' ? (
@@ -496,11 +496,13 @@ export function App(): ReactNode {
                       {source.adapterKind === 'rss' ? <Rss /> : <Database />}
                     </div>
                     <div className="source-copy">
-                      <div>
-                        <span className="health-dot" /> healthy
+                      <div className={`source-health ${source.health}`}>
+                        <span className="health-dot" />
+                        {source.health === 'healthy' ? 'healthy' : 'attention'}
                       </div>
                       <h3>{source.name}</h3>
-                      <p>{source.fileName}</p>
+                      <p className="source-file">{source.fileName}</p>
+                      <p className="source-diagnostic">{source.healthMessage}</p>
                     </div>
                     <dl>
                       <div>
