@@ -37,7 +37,7 @@
     "lucide-react": "1.43.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "yaml": "2.9.0",
+    "yaml": "2.9.1",
     "zod": "4.5.4"
   },
   "devDependencies": {
