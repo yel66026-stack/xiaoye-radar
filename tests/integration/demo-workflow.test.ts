@@ -34,6 +34,8 @@ describe('demo integration workflow', () => {
       excluded: 10,
       timeFiltered: 10,
       ruleFiltered: 10,
+      regionFiltered: 0,
+      unverified: 0,
     })
     expect(state.candidates).toHaveLength(45)
     expect(state.candidates.every(({ reviewStatus }) => reviewStatus === 'pending')).toBe(true)

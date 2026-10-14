@@ -4,7 +4,7 @@
 
 The Source Adapter SDK converts an authorized source into the stable `NormalizedContent` model. An adapter obtains input and understands its native fields. It does not score candidates, decide review status, write the workspace, or bypass a source's controls.
 
-The `v0.4.2` packages are source workspaces inside this monorepo. They are not yet advertised as published npm packages.
+The packages are source workspaces inside this monorepo. They are not advertised as published npm packages. Version 0.5.0 adds an optional host-specific `LiveContentCollector` in the Electron desktop app; it does not change the file-adapter lifecycle. Its authorization, session, rate, page bounds, errors, fields and limitations are documented in [the monitoring guide](zhejiang-monitoring.md).
 
 ## Interface
 

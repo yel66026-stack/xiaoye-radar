@@ -30,7 +30,7 @@ The Community project does not accept features intended for:
 - stealth or anti-detection behavior
 - defeating platform safeguards
 
-Do not submit real credentials, browser profiles, authentication state, private endpoints, customer datasets, or platform-specific selectors in an issue, example, test, or pull request.
+Do not submit real credentials, browser profiles, authentication state, private endpoints, customer datasets, or proprietary Pro integration code in an issue, example, test, or pull request. The optional 0.5.0 public-page collector contains independently authored selectors and keeps the user's normal browser session locally; that session is never committed or exported.
 
 ## Source adapters
 

@@ -1,4 +1,4 @@
-import type { Candidate } from '@xiaoye-radar/core'
+import { contentLocation, type Candidate } from '@xiaoye-radar/core'
 
 const columns: Array<[string, (candidate: Candidate) => unknown]> = [
   ['id', (candidate) => candidate.id],
@@ -10,6 +10,9 @@ const columns: Array<[string, (candidate: Candidate) => unknown]> = [
   ['content', (candidate) => candidate.item.content],
   ['author', (candidate) => candidate.item.author],
   ['published_at', (candidate) => candidate.item.publishedAt],
+  ['location', (candidate) => contentLocation(candidate.item)],
+  ['rule_id', (candidate) => candidate.ruleId],
+  ['rule_revision', (candidate) => candidate.ruleRevision],
   ['url', (candidate) => candidate.item.url],
   ['matched_keywords', (candidate) => candidate.matchedKeywords.join('|')],
   ['review_note', (candidate) => candidate.reviewNote],

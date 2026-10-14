@@ -1,0 +1,12 @@
+id: zhejiang-demo
+name: 浙江民宿指定日期示例
+include: [民宿]
+region:
+  province: 浙江
+  cities: []
+time_window:
+  start: '2026-10-01T00:00:00+08:00'
+  end: '2026-10-14T23:59:59.999+08:00'
+basic_score: 1
+minimum_score: 1
+deduplication: id

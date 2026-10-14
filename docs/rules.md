@@ -40,23 +40,26 @@ deduplication: content
 
 ## Fields
 
-| Field              | Meaning                                                                             |
-| ------------------ | ----------------------------------------------------------------------------------- |
-| `id`               | Stable rule identifier. Generated from name and document hash when omitted.         |
-| `name`             | Human-readable name, required.                                                      |
-| `description`      | Optional description, up to 500 characters.                                         |
-| `enabled`          | Disabled rules filter every item.                                                   |
-| `priority`         | `low`, `normal`, `high`, or `critical`; copied to candidates.                       |
-| `time_window.days` | Positive number of days, up to 3,650. Missing/future-invalid dates fail the window. |
-| `source_filter`    | Exact normalized source-name allowlist. Empty means all sources.                    |
-| `include`          | At least one term must match when the list is non-empty.                            |
-| `exclude`          | Any matching term excludes the item before scoring.                                 |
-| `text_contains`    | A second optional contains gate; at least one must match.                           |
-| `regex`            | Reserved; any non-empty value is rejected in the current release.                   |
-| `score`            | Per-term integer weights from -100 to 100.                                          |
-| `basic_score`      | Starting score from 0 to 100.                                                       |
-| `minimum_score`    | Minimum final score from 0 to 100.                                                  |
-| `deduplication`    | `content`, `id`, or `url`. URL falls back to content when missing.                  |
+| Field                       | Meaning                                                                                 |
+| --------------------------- | --------------------------------------------------------------------------------------- |
+| `id`                        | Stable rule identifier. Generated from name and document hash when omitted.             |
+| `name`                      | Human-readable name, required.                                                          |
+| `description`               | Optional description, up to 500 characters.                                             |
+| `enabled`                   | Disabled rules filter every item.                                                       |
+| `priority`                  | `low`, `normal`, `high`, or `critical`; copied to candidates.                           |
+| `time_window.days`          | Positive number of days, up to 3,650. Missing/future-invalid dates fail the window.     |
+| `source_filter`             | Exact normalized source-name allowlist. Empty means all sources.                        |
+| `include`                   | At least one term must match when the list is non-empty.                                |
+| `include_mode`              | `any` (default) or `all` include terms must match.                                      |
+| `region`                    | Explicit note location: `{ province: 浙江, cities: [杭州] }`; cities may be empty.      |
+| `time_window.start` / `end` | Inclusive ISO 8601 timestamps with offsets. Rolling and absolute constraints intersect. |
+| `exclude`                   | Any matching term excludes the item before scoring.                                     |
+| `text_contains`             | A second optional contains gate; at least one must match.                               |
+| `regex`                     | Reserved; any non-empty value is rejected in the current release.                       |
+| `score`                     | Per-term integer weights from -100 to 100.                                              |
+| `basic_score`               | Starting score from 0 to 100.                                                           |
+| `minimum_score`             | Minimum final score from 0 to 100.                                                      |
+| `deduplication`             | `content`, `id`, or `url`. URL falls back to content when missing.                      |
 
 Keyword lists are trimmed, deduplicated, limited to 250 entries, and compared after Unicode NFKC normalization, lowercasing and whitespace collapsing. A list entry can be up to 160 characters.
 
@@ -64,25 +67,29 @@ Keyword lists are trimmed, deduplicated, limited to 250 entries, and compared af
 
 ```mermaid
 flowchart TD
-  A[Fingerprint] --> B{Duplicate?}
-  B -->|Yes| X[duplicate]
-  B -->|No| C{Enabled?}
+  A[Fingerprint] --> C{Enabled?}
   C -->|No| D[filtered_disabled]
   C -->|Yes| E{Source allowed?}
   E -->|No| F[filtered_source]
   E -->|Yes| G{Within time window?}
   G -->|No| H[filtered_time]
-  G -->|Yes| I{Excluded?}
+  G -->|Yes or missing| Q{Region allowed?}
+  Q -->|Outside| T[filtered_region]
+  Q -->|Yes or missing| I{Excluded?}
   I -->|Yes| J[excluded]
   I -->|No| K{Include/text gates pass?}
   K -->|No| L[filtered rule outcome]
   K -->|Yes| M[Calculate bounded score]
   M --> N{Meets minimum?}
   N -->|No| O[filtered_score]
-  N -->|Yes| P[candidate]
+  N -->|Yes| U{Evidence complete?}
+  U -->|No| V[unverified]
+  U -->|Yes| B{Duplicate?}
+  B -->|Yes| X[duplicate]
+  B -->|No| P[candidate]
 ```
 
-Deduplication is intentionally first, so a repeated input does not re-enter later stages. Exclusion runs before scoring. The final score is clamped to `0..100`.
+Deduplication follows the constraints in 0.5.0 so an invalid copy cannot suppress a later valid copy. Exclusion runs before scoring. Missing date/location evidence is kept separately only when the other gates and score pass. The final score is clamped to `0..100`.
 
 ## Scoring
 
@@ -106,7 +113,7 @@ Before evaluation, items are ordered by fingerprint and stable item fields. Cand
 
 ## Time behavior
 
-Items with no valid `publishedAt` fail a configured time window. Timestamps over five minutes in the future also fail. Without a time window, a missing timestamp is allowed.
+Items with no valid `publishedAt` cannot enter candidates under a configured time window; otherwise matching records enter `unverified`. Timestamps over five minutes in the future fail. Without a time window, a missing timestamp is allowed. Absolute boundaries are inclusive; the desktop date form uses Asia/Shanghai days. Region filtering uses explicit administrative/place metadata, never IP or author location or body-text mentions; ambiguous place names require confirmation. See [the monitoring guide](zhejiang-monitoring.md).
 
 ## Safety and performance
 

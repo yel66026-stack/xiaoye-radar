@@ -25,6 +25,8 @@ flowchart LR
 6. A person approves, rejects, archives, or returns a candidate to pending.
 7. Workspace state and source copies are written locally; selected results can be exported.
 
+In 0.5.0, the optional desktop `XiaohongshuBrowser` is a second input path. Its independent sandboxed BrowserWindow has no preload or Node access. It reads public page fields into validated `NormalizedContent`, then uses the same source-neutral engine. `ScheduleRunner` checks persisted intervals every 30 seconds, runs jobs serially and catches up overdue jobs once after restart. File jobs refresh the original selected file. Missing location/date evidence is persisted separately from candidates. See [the monitoring guide](zhejiang-monitoring.md) for bounds and local session behavior.
+
 ## Package boundaries
 
 ```mermaid
@@ -64,7 +66,7 @@ Owns the adapter contract, registry, file limits, normalization helpers and buil
 
 ### `packages/storage`
 
-Owns the schema-versioned Community workspace. Writes are serialized and use a temporary file followed by rename. Source IDs are constrained before they can be used as filenames. Community keeps up to 10,000 candidates and 2,000 run records.
+Owns the schema-versioned Community workspace. Writes are serialized and use a temporary file followed by rename. Source IDs are constrained before they can be used as filenames. Community keeps up to 10,000 candidates, 2,000 uncertain records and 2,000 run records. New fields have backward-compatible defaults for reading existing version-1 workspaces; older strict-schema binaries cannot read the upgraded fields.
 
 ### `packages/review-engine`
 

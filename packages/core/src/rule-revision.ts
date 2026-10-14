@@ -27,6 +27,12 @@ export function ruleRevisionFor(rule: RuleSet): string {
       Object.entries(rule.keywordScores).sort(([left], [right]) => compareText(left, right)),
     ),
     deduplication: rule.deduplication,
+    ...(rule.includeMode === 'all' ? { includeMode: rule.includeMode } : {}),
+    ...(rule.regionFilter
+      ? { regionFilter: { ...rule.regionFilter, cities: sorted(rule.regionFilter.cities) } }
+      : {}),
+    ...(rule.publishedAfter ? { publishedAfter: rule.publishedAfter } : {}),
+    ...(rule.publishedBefore ? { publishedBefore: rule.publishedBefore } : {}),
   }
 
   return createHash('sha256').update(JSON.stringify(semantics), 'utf8').digest('hex')

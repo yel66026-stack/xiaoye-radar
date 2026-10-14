@@ -11,7 +11,15 @@ This roadmap describes likely Community work. It is directional rather than a pr
 - establish a supported security-reporting channel
 - `v0.4.x` target: evaluate restoring regular-expression rules only with worker or process isolation and a hard time budget
 
-## v0.5.0: formalize the Source Adapter SDK
+## v0.5.0: combined monitoring and in-app schedules
+
+- explicit Zhejiang location, rolling/absolute date and AND/OR keyword constraints
+- persisted interval jobs, pause/resume, original-file refresh and restart catch-up
+- separate uncertain evidence and per-condition exports
+- optional experimental Xiaohongshu normal-browser public-page collection
+- synthetic fixtures, public-page tests and Windows desktop verification
+
+## Next: formalize the Source Adapter SDK
 
 - define package versioning and compatibility policy
 - decide whether to publish the public packages to npm

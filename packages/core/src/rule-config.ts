@@ -12,6 +12,12 @@ const ruleDocumentKeys = new Set([
   'enabled',
   'priority',
   'include',
+  'include_mode',
+  'includeMode',
+  'region',
+  'regionFilter',
+  'publishedAfter',
+  'publishedBefore',
   'exclude',
   'text_contains',
   'textContains',
@@ -80,7 +86,7 @@ export function parseRuleDocument(document: string, now = new Date()): RuleSet {
   const raw = asRecord(parsed.toJS({ maxAliasCount: 20 }))
   const timeWindow = asRecord(raw.time_window ?? raw.timeWindow)
   rejectUnknownKeys(raw, ruleDocumentKeys, 'Rule document')
-  rejectUnknownKeys(timeWindow, new Set(['days']), 'Rule time window')
+  rejectUnknownKeys(timeWindow, new Set(['days', 'start', 'end']), 'Rule time window')
   const score = asRecord(raw.score ?? raw.keywordScores)
   const name = typeof raw.name === 'string' ? raw.name.trim() : ''
   const timestamp = now.toISOString()
@@ -109,6 +115,10 @@ export function parseRuleDocument(document: string, now = new Date()): RuleSet {
     enabled: typeof raw.enabled === 'boolean' ? raw.enabled : true,
     priority: raw.priority ?? 'normal',
     include: uniqueStrings(raw.include),
+    includeMode: raw.include_mode ?? raw.includeMode ?? 'any',
+    regionFilter: raw.region ?? raw.regionFilter ?? null,
+    publishedAfter: timeWindow.start ?? raw.publishedAfter ?? null,
+    publishedBefore: timeWindow.end ?? raw.publishedBefore ?? null,
     exclude: uniqueStrings(raw.exclude),
     textContains: uniqueStrings(raw.text_contains ?? raw.textContains),
     regex,

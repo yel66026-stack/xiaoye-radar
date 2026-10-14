@@ -23,11 +23,16 @@ import {
 } from './data-directory-policy'
 import { isAllowedExternalUrl, isAllowedRendererUrl } from './url-policy'
 import { installSingleInstanceProtection } from './single-instance'
+import { XiaohongshuBrowser } from './xiaohongshu-browser'
+import { ScheduleRunner } from './schedule-runner'
+import { createMonitorSchema } from '../shared/monitoring-config'
 
 const APP_ID = 'com.xiaoye.radar.community'
 const developmentUrl = app.isPackaged ? undefined : process.env.ELECTRON_RENDERER_URL
 let mainWindow: BrowserWindow | null = null
 let service: CommunityService | null = null
+let xiaohongshu: XiaohongshuBrowser | null = null
+let scheduler: ScheduleRunner | null = null
 
 app.setName(COMMUNITY_APP_NAME)
 const communityUserDataPath = resolveCommunityUserDataPath({
@@ -81,6 +86,39 @@ async function bootstrap(): Promise<BootstrapResponse> {
 }
 
 function registerIpc(): void {
+  ipcMain.handle(IPC_CHANNELS.openXiaohongshu, async (event) => {
+    assertTrustedSender(event)
+    if (!xiaohongshu) throw new Error('小红书浏览器尚未初始化。')
+    await xiaohongshu.open()
+    return { ok: true }
+  })
+  ipcMain.handle(IPC_CHANNELS.createMonitor, async (event, request: unknown) => {
+    assertTrustedSender(event)
+    await currentService().createMonitor(createMonitorSchema.parse(request))
+    return {
+      ok: true,
+      message: '监测任务已保存，定时扫描在应用运行时执行。',
+      state: await currentService().state(),
+    }
+  })
+  ipcMain.handle(IPC_CHANNELS.updateJob, async (event, request: unknown) => {
+    assertTrustedSender(event)
+    await currentService().updateJob(request)
+    return { ok: true, message: '任务设置已更新。', state: await currentService().state() }
+  })
+  ipcMain.handle(IPC_CHANNELS.runJob, async (event, request: unknown) => {
+    assertTrustedSender(event)
+    const { jobId } = z
+      .object({ jobId: z.string().min(1).max(100) })
+      .strict()
+      .parse(request)
+    await currentService().runJob(jobId)
+    return {
+      ok: true,
+      message: '扫描完成，匹配结果及待确认记录已保存。',
+      state: await currentService().state(),
+    }
+  })
   ipcMain.handle(IPC_CHANNELS.bootstrap, async (event) => {
     assertTrustedSender(event)
     return bootstrap()
@@ -148,8 +186,8 @@ function registerIpc(): void {
   })
   ipcMain.handle(IPC_CHANNELS.exportCandidates, async (event, request: unknown) => {
     assertTrustedSender(event)
-    const { format } = z
-      .object({ format: z.enum(['csv', 'json']) })
+    const { format, ruleId } = z
+      .object({ format: z.enum(['csv', 'json']), ruleId: z.string().min(1).max(100).optional() })
       .strict()
       .parse(request)
     const result = await dialog.showSaveDialog(mainWindow!, {
@@ -157,7 +195,9 @@ function registerIpc(): void {
       filters: [{ name: format.toUpperCase(), extensions: [format] }],
     })
     if (result.canceled || !result.filePath) return null
-    const candidates = (await currentService().state()).candidates
+    const candidates = (await currentService().state()).candidates.filter(
+      (entry) => !ruleId || entry.ruleId === ruleId,
+    )
     await writeFile(
       result.filePath,
       format === 'csv' ? candidatesToCsv(candidates) : candidatesToJson(candidates),
@@ -177,7 +217,8 @@ function registerIpc(): void {
       .object({ candidateId: z.string().min(1) })
       .strict()
       .parse(request)
-    const candidate = (await currentService().state()).candidates.find(
+    const state = await currentService().state()
+    const candidate = [...state.candidates, ...state.unverified].find(
       ({ id }) => id === candidateId,
     )
     const url = candidate?.item.url
@@ -217,6 +258,7 @@ function createWindow(): BrowserWindow {
   })
   window.on('closed', () => {
     if (mainWindow === window) mainWindow = null
+    if (process.platform !== 'darwin') app.quit()
   })
   if (developmentUrl) void window.loadURL(developmentUrl)
   else void window.loadFile(join(import.meta.dirname, '../renderer/index.html'))
@@ -238,7 +280,8 @@ async function start(): Promise<void> {
     callback(false),
   )
   const storage = new JsonFileStorage(join(app.getPath('userData'), 'community-workspace'))
-  service = new CommunityService(storage, examplesPath())
+  xiaohongshu = new XiaohongshuBrowser()
+  service = new CommunityService(storage, examplesPath(), xiaohongshu)
   await service.initialize()
   if (process.env.XIAOYE_RADAR_AUTO_DEMO === '1' && (!app.isPackaged || capturePath)) {
     await service.importDemo()
@@ -255,6 +298,8 @@ async function start(): Promise<void> {
     }
   }
   registerIpc()
+  scheduler = new ScheduleRunner(service)
+  if (!capturePath) scheduler.start()
   mainWindow = createWindow()
   mainWindow.webContents.once('did-finish-load', () => {
     if (mainWindow) void captureIfRequested(mainWindow, capturePath)
@@ -279,5 +324,9 @@ if (ownsSingleInstanceLock) {
 
   app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
+  })
+  app.on('before-quit', () => {
+    scheduler?.stop()
+    xiaohongshu?.dispose()
   })
 }
