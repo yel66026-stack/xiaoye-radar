@@ -158,12 +158,21 @@ export function normalizeRecord(
 ): NormalizedContent {
   const raw = asRecord(rawValue)
   const fields = {
-    id: [mapping.id, 'id', 'guid', 'uuid', 'source_id'].filter(Boolean) as string[],
-    title: [mapping.title, 'title', 'name', 'subject'].filter(Boolean) as string[],
-    content: [mapping.content, 'content', 'body', 'text', 'description', 'summary'].filter(
+    id: [mapping.id, 'id', 'guid', 'uuid', 'source_id', 'note_id', '笔记id'].filter(
       Boolean,
     ) as string[],
-    author: [mapping.author, 'author', 'creator', 'byline'].filter(Boolean) as string[],
+    title: [mapping.title, 'title', 'name', 'subject', '标题'].filter(Boolean) as string[],
+    content: [
+      mapping.content,
+      'content',
+      'body',
+      'text',
+      'description',
+      'summary',
+      'desc',
+      '正文',
+    ].filter(Boolean) as string[],
+    author: [mapping.author, 'author', 'creator', 'byline', '作者'].filter(Boolean) as string[],
     publishedAt: [
       mapping.publishedAt,
       'publishedAt',
@@ -171,8 +180,9 @@ export function normalizeRecord(
       'pubDate',
       'date',
       'updated',
+      '发布时间',
     ].filter(Boolean) as string[],
-    url: [mapping.url, 'url', 'link', 'href'].filter(Boolean) as string[],
+    url: [mapping.url, 'url', 'link', 'href', '链接'].filter(Boolean) as string[],
   }
   const title = stringValue(firstValue(raw, fields.title))
   const content = stringValue(firstValue(raw, fields.content))
@@ -189,7 +199,18 @@ export function normalizeRecord(
     author,
     publishedAt,
     url,
-    metadata: safeMetadata(raw, consumed),
+    metadata: safeMetadata(
+      {
+        ...asRecord(raw.metadata),
+        ...raw,
+        location:
+          firstValue(raw, ['location', '地点', '笔记地点']) ?? asRecord(raw.metadata).location,
+        region: firstValue(raw, ['region', '地区']) ?? asRecord(raw.metadata).region,
+        province: firstValue(raw, ['province', '省份']) ?? asRecord(raw.metadata).province,
+        city: firstValue(raw, ['city', '城市']) ?? asRecord(raw.metadata).city,
+      },
+      [...consumed, 'metadata'],
+    ),
   })
 }
 

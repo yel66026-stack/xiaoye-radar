@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { ContentDeduplicator, fingerprintFor, normalizeText } from './deduplication'
+import { checkRegion } from './region'
 import type {
   Candidate,
   DecisionOutcome,
@@ -71,9 +72,6 @@ export class RuleEngine {
       reasons: [] as string[],
     }
 
-    if (deduplicator.checkAndAdd(fingerprint)) {
-      return { ...base, outcome: 'duplicate', reasons: ['Duplicate fingerprint'] }
-    }
     if (!rule.enabled) {
       return { ...base, outcome: 'filtered_disabled', reasons: ['Rule is disabled'] }
     }
@@ -85,23 +83,33 @@ export class RuleEngine {
       }
     }
 
-    if (rule.timeWindowDays !== null) {
+    const missing: string[] = []
+    if (rule.timeWindowDays !== null || rule.publishedAfter || rule.publishedBefore) {
       const published = item.publishedAt ? Date.parse(item.publishedAt) : Number.NaN
       const age = now.getTime() - published
-      if (
-        Number.isNaN(published) ||
+      if (Number.isNaN(published)) missing.push('Published time is missing')
+      else if (
         age < -FUTURE_TOLERANCE_MS ||
-        age > rule.timeWindowDays * DAY_MS
+        (rule.timeWindowDays !== null && age > rule.timeWindowDays * DAY_MS) ||
+        (rule.publishedAfter !== null && published < Date.parse(rule.publishedAfter)) ||
+        (rule.publishedBefore !== null && published > Date.parse(rule.publishedBefore))
       ) {
         return {
           ...base,
           outcome: 'filtered_time',
-          reasons: [
-            Number.isNaN(published) ? 'Published time is missing' : 'Outside the time window',
-          ],
+          reasons: ['Outside the time window'],
         }
       }
     }
+
+    const region = checkRegion(item, rule.regionFilter)
+    if (region === 'outside')
+      return {
+        ...base,
+        outcome: 'filtered_region',
+        reasons: ['Location is outside the selected region'],
+      }
+    if (region === 'missing') missing.push('Note location is missing')
 
     const excluded = matches(text, rule.exclude)
     if (excluded.length > 0) {
@@ -114,7 +122,11 @@ export class RuleEngine {
     }
 
     const included = matches(text, rule.include)
-    if (rule.include.length > 0 && included.length === 0) {
+    if (
+      rule.include.length > 0 &&
+      (included.length === 0 ||
+        (rule.includeMode === 'all' && included.length !== rule.include.length))
+    ) {
       return { ...base, outcome: 'filtered_include', reasons: ['No include keyword matched'] }
     }
 
@@ -149,6 +161,13 @@ export class RuleEngine {
         matchedKeywords,
         reasons: [`Score ${score} is below minimum ${rule.minimumScore}`],
       }
+    }
+
+    if (missing.length > 0)
+      return { ...base, outcome: 'unverified', score, matchedKeywords, reasons: missing }
+    // Failed constraints must not consume the fingerprint of a later valid copy.
+    if (deduplicator.checkAndAdd(fingerprint)) {
+      return { ...base, outcome: 'duplicate', reasons: ['Duplicate fingerprint'] }
     }
 
     return {
@@ -212,8 +231,26 @@ export class RuleEngine {
       excluded: decisions.filter(({ outcome }) => outcome === 'excluded').length,
       timeFiltered: decisions.filter(({ outcome }) => outcome === 'filtered_time').length,
       ruleFiltered: decisions.filter(({ outcome }) => ruleFiltered(outcome)).length,
+      regionFiltered: decisions.filter(({ outcome }) => outcome === 'filtered_region').length,
+      unverified: decisions.filter(({ outcome }) => outcome === 'unverified').length,
     }
 
-    return { decisions, candidates, stats }
+    const unverified = decisions
+      .filter(({ outcome }) => outcome === 'unverified')
+      .map((decision) => ({
+        id: randomUUID(),
+        runId,
+        ruleId: rule.id,
+        ruleRevision: rule.revision,
+        sourceRecordId: options.sourceRecordId,
+        item: decision.item,
+        fingerprint: decision.fingerprint,
+        score: decision.score,
+        priority: rule.priority,
+        matchedKeywords: decision.matchedKeywords,
+        reasons: decision.reasons,
+        createdAt,
+      }))
+    return { decisions, candidates, unverified, stats }
   }
 }

@@ -1,5 +1,6 @@
 import type { ReviewStatus } from '@xiaoye-radar/core'
 import type { WorkspaceState } from '@xiaoye-radar/storage'
+import type { CreateMonitorRequest } from './monitoring-config'
 
 export const IPC_CHANNELS = {
   bootstrap: 'community:bootstrap',
@@ -12,6 +13,10 @@ export const IPC_CHANNELS = {
   exportCandidates: 'community:export-candidates',
   openDataFolder: 'community:open-data-folder',
   openCandidateUrl: 'community:open-candidate-url',
+  openXiaohongshu: 'community:open-xiaohongshu',
+  createMonitor: 'community:create-monitor',
+  updateJob: 'community:update-job',
+  runJob: 'community:run-job',
 } as const
 
 export interface BootstrapResponse {
@@ -37,7 +42,18 @@ export interface CommunityDesktopApi {
   saveRule(document: string): Promise<ActionResponse>
   runMonitoring(sourceRecordId: string, ruleId: string): Promise<ActionResponse>
   updateReview(candidateId: string, status: ReviewStatus, note: string): Promise<ActionResponse>
-  exportCandidates(format: 'csv' | 'json'): Promise<{ ok: true; path: string } | null>
+  exportCandidates(
+    format: 'csv' | 'json',
+    ruleId?: string,
+  ): Promise<{ ok: true; path: string } | null>
   openDataFolder(): Promise<{ ok: true }>
   openCandidateUrl(candidateId: string): Promise<{ ok: true }>
+  openXiaohongshu(): Promise<{ ok: true }>
+  createMonitor(request: CreateMonitorRequest): Promise<ActionResponse>
+  updateJob(
+    jobId: string,
+    enabled: boolean,
+    intervalMinutes: number | null,
+  ): Promise<ActionResponse>
+  runJob(jobId: string): Promise<ActionResponse>
 }

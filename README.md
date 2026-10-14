@@ -4,9 +4,9 @@
 
 [中文说明](README.zh-CN.md) · [Architecture](docs/architecture.md) · [Adapter SDK](docs/source-adapter.md) · [Rules](docs/rules.md) · [Community](docs/community.md) · [Compliance](docs/compliance.md)
 
-Xiaoye Radar Community turns authorized, public-content exports into a local review workflow. Import CSV, JSON, RSS/Atom, Markdown, or text files; apply source-neutral rules; remove duplicates; review candidates; and export the result without signing in to a platform or calling a private service.
+Xiaoye Radar Community turns authorized public content into a local review workflow. Import CSV, JSON, RSS/Atom, Markdown, or text files; combine location, time and keyword rules; schedule refreshes; remove duplicates; review candidates; and export results. Version 0.5.0 also adds an optional experimental Xiaohongshu normal-browser collector using the user's own local login.
 
-> Status: `v0.4.2` Community Edition. Windows portable builds are currently unsigned. Security reports use GitHub Private Vulnerability Reporting rather than public issues.
+> Source status: `v0.5.0` Community Edition. Xiaohongshu real-account compatibility requires user validation; schedules run while the desktop app is open. Windows portable builds are currently unsigned. Security reports use GitHub Private Vulnerability Reporting rather than public issues.
 
 ![Xiaoye Radar Community dashboard](docs/images/dashboard.png)
 
@@ -14,7 +14,7 @@ Xiaoye Radar Community turns authorized, public-content exports into a local rev
 
 Monitoring projects repeatedly need the same middle layer: normalize several input formats, filter a time window, apply include and exclusion rules, rank matches, suppress repeats, keep an audit trail, and leave the final decision to a person. Xiaoye Radar packages that workflow as a usable desktop application and small TypeScript workspaces.
 
-The Community Edition is useful on its own. It has no Pro license check, private API, account login, telemetry, or automatic updater.
+The Community Edition is useful on its own. It has no Pro license check, private API, telemetry, or automatic updater. File workflows require no account; the optional browser collector keeps its session locally.
 
 ## Use cases
 
@@ -24,9 +24,13 @@ The Community Edition is useful on its own. It has no Pro license check, private
 - Local RSS/Atom monitoring
 - Custom source adapters that follow the documented authorization boundary
 
-These are examples of the same source-neutral pipeline. None changes Xiaoye Radar into a platform crawler or removes the human-review step.
+These are examples of the same source-neutral pipeline and retain the human-review step.
 
 ## Features
+
+- Zhejiang province/city + rolling or absolute dates + AND/OR keyword monitoring, with separate uncertain records for missing evidence
+- Persistent in-app interval schedules, pause/resume, restart catch-up, original-file refresh and per-task exports
+- Experimental Xiaohongshu public-page collection through a sandboxed normal-browser session, bounded and paused when access requires user action
 
 - Configurable include, exclude, text-contains, source, time-window, score, priority, and enabled-state rules
 - SHA-256 deduplication by content, source ID, or URL, scoped to a semantic rule revision
@@ -169,7 +173,7 @@ export interface SourceAdapter<TConfig = unknown, TRaw = unknown> {
 }
 ```
 
-The Community release ships file-based adapters. It deliberately does not ship a crawler, CAPTCHA workaround, credential collector, or authentication bypass. The workspace packages are source workspaces in `v0.4.2`; they are not claimed as published npm packages. See [docs/source-adapter.md](docs/source-adapter.md).
+The SDK ships file-based adapters. An optional experimental public-page collector lives in the desktop app and is documented in [the Zhejiang monitoring guide](docs/zhejiang-monitoring.md). No CAPTCHA workaround, credential collector or authentication bypass is included. Workspace packages are source workspaces, not published npm packages. See [docs/source-adapter.md](docs/source-adapter.md).
 
 ## Examples
 
@@ -183,18 +187,19 @@ All committed example content is synthetic. Replace it only with data you are au
 
 ## Community and Pro
 
-| Capability                          | Community      | Pro                                        |
-| ----------------------------------- | -------------- | ------------------------------------------ |
-| General rule engine                 | Yes            | Existing commercial equivalent             |
-| CSV, JSON, RSS/Atom and local files | Yes            | Product-dependent                          |
-| Local storage and human review      | Yes            | Yes                                        |
-| Public Adapter SDK contract         | Yes            | Private integration pending owner decision |
-| Platform-specific integrations      | No             | Yes                                        |
-| Account, login and session handling | No             | Yes                                        |
-| Professional rule packs and scoring | Basic examples | Advanced commercial assets                 |
-| Commercial automation               | No             | Yes                                        |
+| Capability                          | Community                        | Pro                                        |
+| ----------------------------------- | -------------------------------- | ------------------------------------------ |
+| General rule engine                 | Yes                              | Existing commercial equivalent             |
+| CSV, JSON, RSS/Atom and local files | Yes                              | Product-dependent                          |
+| Local storage and human review      | Yes                              | Yes                                        |
+| Public Adapter SDK contract         | Yes                              | Private integration pending owner decision |
+| Platform-specific integrations      | Experimental Xiaohongshu browser | Yes                                        |
+| Account, login and session handling | Optional local browser session   | Yes                                        |
+| Professional rule packs and scoring | Basic examples                   | Advanced commercial assets                 |
+| Commercial automation               | No                               | Yes                                        |
+| In-app scheduled scans              | Yes                              | Yes                                        |
 
-No Pro source, platform selector, account state, customer data, or commercial rule pack is included here. The detailed boundary is in [docs/editions.md](docs/editions.md).
+No Pro source, proprietary platform selector, account state, customer data or commercial rule pack is included here. The optional browser collector is independently authored. The detailed boundary is in [docs/editions.md](docs/editions.md).
 
 ## Roadmap
 

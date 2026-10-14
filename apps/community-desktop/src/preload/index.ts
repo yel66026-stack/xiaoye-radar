@@ -11,10 +11,16 @@ const api: CommunityDesktopApi = {
     ipcRenderer.invoke(IPC_CHANNELS.runMonitoring, { sourceRecordId, ruleId }),
   updateReview: (candidateId, status, note) =>
     ipcRenderer.invoke(IPC_CHANNELS.updateReview, { candidateId, status, note }),
-  exportCandidates: (format) => ipcRenderer.invoke(IPC_CHANNELS.exportCandidates, { format }),
+  exportCandidates: (format, ruleId) =>
+    ipcRenderer.invoke(IPC_CHANNELS.exportCandidates, { format, ruleId }),
   openDataFolder: () => ipcRenderer.invoke(IPC_CHANNELS.openDataFolder),
   openCandidateUrl: (candidateId) =>
     ipcRenderer.invoke(IPC_CHANNELS.openCandidateUrl, { candidateId }),
+  openXiaohongshu: () => ipcRenderer.invoke(IPC_CHANNELS.openXiaohongshu),
+  createMonitor: (request) => ipcRenderer.invoke(IPC_CHANNELS.createMonitor, request),
+  updateJob: (jobId, enabled, intervalMinutes) =>
+    ipcRenderer.invoke(IPC_CHANNELS.updateJob, { jobId, enabled, intervalMinutes }),
+  runJob: (jobId) => ipcRenderer.invoke(IPC_CHANNELS.runJob, { jobId }),
 }
 
 contextBridge.exposeInMainWorld('xiaoyeCommunity', Object.freeze(api))

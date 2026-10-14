@@ -36,11 +36,22 @@ export const ruleSetSchema = z
     enabled: z.boolean().default(true),
     priority: rulePrioritySchema.default('normal'),
     include: keywordListSchema.default([]),
+    includeMode: z.enum(['any', 'all']).default('any'),
     exclude: keywordListSchema.default([]),
     textContains: keywordListSchema.default([]),
     regex: z.array(z.string().min(1).max(120)).max(0).default([]),
     sourceFilters: keywordListSchema.default([]),
     timeWindowDays: z.number().positive().max(3650).nullable().default(null),
+    publishedAfter: z.string().datetime({ offset: true }).nullable().default(null),
+    publishedBefore: z.string().datetime({ offset: true }).nullable().default(null),
+    regionFilter: z
+      .object({
+        province: z.string().trim().min(1).max(80),
+        cities: keywordListSchema.default([]),
+      })
+      .strict()
+      .nullable()
+      .default(null),
     minimumScore: z.number().int().min(0).max(100).default(1),
     basicScore: z.number().int().min(0).max(100).default(0),
     keywordScores: z.record(z.string().min(1), z.number().int().min(-100).max(100)).default({}),
@@ -50,6 +61,13 @@ export const ruleSetSchema = z
     updatedAt: z.string().datetime({ offset: true }),
   })
   .strict()
+  .refine(
+    (rule) =>
+      !rule.publishedAfter ||
+      !rule.publishedBefore ||
+      Date.parse(rule.publishedAfter) <= Date.parse(rule.publishedBefore),
+    { message: 'Start date must not be after end date', path: ['publishedBefore'] },
+  )
 
 export type RuleSet = z.infer<typeof ruleSetSchema>
 
@@ -60,6 +78,8 @@ export const decisionOutcomeSchema = z.enum([
   'filtered_disabled',
   'filtered_source',
   'filtered_time',
+  'filtered_region',
+  'unverified',
   'filtered_include',
   'filtered_text',
   'filtered_regex',
@@ -93,6 +113,13 @@ export const candidateSchema = z
 
 export type Candidate = z.infer<typeof candidateSchema>
 
+export const unverifiedRecordSchema = candidateSchema.omit({
+  reviewStatus: true,
+  reviewNote: true,
+  reviewedAt: true,
+})
+export type UnverifiedRecord = z.infer<typeof unverifiedRecordSchema>
+
 export interface RuleDecision {
   item: NormalizedContent
   fingerprint: string
@@ -109,11 +136,14 @@ export interface MonitorStats {
   excluded: number
   timeFiltered: number
   ruleFiltered: number
+  regionFiltered: number
+  unverified: number
 }
 
 export interface MonitorResult {
   decisions: RuleDecision[]
   candidates: Candidate[]
+  unverified: UnverifiedRecord[]
   stats: MonitorStats
 }
 
@@ -135,6 +165,8 @@ export const scanRunSchema = z
       excluded: z.number().int().nonnegative(),
       timeFiltered: z.number().int().nonnegative(),
       ruleFiltered: z.number().int().nonnegative(),
+      regionFiltered: z.number().int().nonnegative().default(0),
+      unverified: z.number().int().nonnegative().default(0),
     }),
     error: z.string().nullable().default(null),
   })

@@ -1,0 +1,49 @@
+[
+  {
+    "id": "synthetic-hangzhou",
+    "title": "虚构：杭州民宿露营体验",
+    "content": "这是一条完全虚构的民宿与露营体验记录，仅用于组合条件演示。",
+    "author": "虚构作者甲",
+    "publishedAt": "2026-10-12T10:00:00+08:00",
+    "location": { "province": "浙江", "city": "杭州" },
+    "url": "https://example.invalid/synthetic/hangzhou"
+  },
+  {
+    "id": "synthetic-ningbo",
+    "title": "虚构：宁波民宿体验",
+    "content": "这是一条完全虚构的民宿体验记录，仅用于演示。",
+    "author": "虚构作者乙",
+    "publishedAt": "2026-10-13T14:30:00+08:00",
+    "location": "浙江省宁波市",
+    "url": "https://example.invalid/synthetic/ningbo"
+  },
+  {
+    "id": "synthetic-shanghai",
+    "title": "虚构：上海民宿体验",
+    "content": "这条民宿记录位于上海，应被浙江地区筛选排除。",
+    "publishedAt": "2026-10-12T10:00:00+08:00",
+    "location": "上海市浦东新区"
+  },
+  {
+    "id": "synthetic-old",
+    "title": "虚构：过期民宿记录",
+    "content": "地点属于浙江，但日期超出示例指定范围。",
+    "publishedAt": "2026-09-01T10:00:00+08:00",
+    "location": "浙江省杭州市"
+  },
+  {
+    "id": "synthetic-unrelated",
+    "title": "虚构：杭州天气",
+    "content": "与指定关键词无关的天气记录。",
+    "publishedAt": "2026-10-12T10:00:00+08:00",
+    "location": "杭州市"
+  },
+  {
+    "id": "synthetic-unknown",
+    "title": "虚构：地点待确认的民宿体验",
+    "content": "这条民宿记录缺少笔记地点，IP 属地浙江不能替代地点。",
+    "publishedAt": "2026-10-12T10:00:00+08:00",
+    "ip_location": "浙江",
+    "url": "https://example.invalid/synthetic/unknown"
+  }
+]

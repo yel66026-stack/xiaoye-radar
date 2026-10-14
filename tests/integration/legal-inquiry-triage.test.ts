@@ -61,6 +61,8 @@ describe('Legal Inquiry Triage example', () => {
       excluded: 18,
       timeFiltered: 10,
       ruleFiltered: 16,
+      regionFiltered: 0,
+      unverified: 0,
     })
     expect(outcomes.get('synthetic-actionable-01')).toBe('candidate')
     expect(outcomes.get('synthetic-education-01')).toBe('excluded')
@@ -89,6 +91,8 @@ describe('Legal Inquiry Triage example', () => {
       excluded: 18,
       timeFiltered: 10,
       ruleFiltered: 16,
+      regionFiltered: 0,
+      unverified: 0,
     })
     expect(firstState.candidates).toHaveLength(51)
 
@@ -102,6 +106,8 @@ describe('Legal Inquiry Triage example', () => {
       excluded: 18,
       timeFiltered: 10,
       ruleFiltered: 16,
+      regionFiltered: 0,
+      unverified: 0,
     })
     expect(repeatedState.candidates).toHaveLength(51)
 
@@ -120,6 +126,8 @@ describe('Legal Inquiry Triage example', () => {
       excluded: 18,
       timeFiltered: 10,
       ruleFiltered: 16,
+      regionFiltered: 0,
+      unverified: 0,
     })
     expect(changedState.candidates).toHaveLength(102)
     expect(new Set(changedState.candidates.map(({ ruleRevision }) => ruleRevision)).size).toBe(2)

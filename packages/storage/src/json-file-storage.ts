@@ -1,7 +1,13 @@
 import { randomUUID } from 'node:crypto'
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import { basename, join } from 'node:path'
-import type { Candidate, NormalizedContent, RuleSet, ScanRun } from '@xiaoye-radar/core'
+import type {
+  Candidate,
+  NormalizedContent,
+  RuleSet,
+  ScanRun,
+  UnverifiedRecord,
+} from '@xiaoye-radar/core'
 import {
   emptyWorkspace,
   monitoringJobSchema,
@@ -53,6 +59,7 @@ export class JsonFileStorage {
       health?: SourceRecord['health']
       healthMessage?: string
       healthCheckedAt?: string | null
+      refreshPath?: string | null
     },
     items: NormalizedContent[],
   ): Promise<SourceRecord> {
@@ -74,6 +81,7 @@ export class JsonFileStorage {
         healthMessage: input.healthMessage ?? 'Source imported successfully.',
         healthCheckedAt: input.healthCheckedAt ?? null,
         fileName: basename(input.fileName),
+        refreshPath: input.refreshPath ?? existing?.refreshPath ?? null,
       })
       await this.#writeJson(join(this.#sourcesPath, `${id}.json`), sourceItemsSchema.parse(items))
       state.sources = [...state.sources.filter((source) => source.id !== id), record]
@@ -110,11 +118,12 @@ export class JsonFileStorage {
   async recordRun(
     run: ScanRun,
     candidates: Candidate[],
+    unverified: UnverifiedRecord[] = [],
   ): Promise<{ inserted: number; duplicates: number }> {
     return this.#serialized(async () => {
       const state = await this.read()
       if (
-        candidates.some(
+        [...candidates, ...unverified].some(
           (candidate) =>
             candidate.sourceRecordId !== run.sourceRecordId ||
             candidate.ruleId !== run.ruleId ||
@@ -141,9 +150,37 @@ export class JsonFileStorage {
       const duplicates = candidates.length - fresh.length
       state.candidates = [...fresh, ...state.candidates].slice(0, 10_000)
       state.runs = [run, ...state.runs].slice(0, 2_000)
+      const unresolved = new Map(
+        state.unverified.map((record) => [
+          `${record.sourceRecordId}:${record.ruleId}:${record.ruleRevision}:${record.fingerprint}`,
+          record,
+        ]),
+      )
+      for (const record of unverified)
+        if (!known.has(record.fingerprint))
+          unresolved.set(
+            `${record.sourceRecordId}:${record.ruleId}:${record.ruleRevision}:${record.fingerprint}`,
+            record,
+          )
+      for (const record of candidates)
+        unresolved.delete(
+          `${record.sourceRecordId}:${record.ruleId}:${record.ruleRevision}:${record.fingerprint}`,
+        )
+      state.unverified = [...unresolved.values()]
+        .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+        .slice(0, 2000)
       state.jobs = state.jobs.map((job) =>
         job.sourceRecordId === run.sourceRecordId && job.ruleId === run.ruleId
-          ? { ...job, lastRunAt: run.finishedAt, updatedAt: run.finishedAt }
+          ? {
+              ...job,
+              lastRunAt: run.finishedAt,
+              updatedAt: run.finishedAt,
+              lastError: run.error,
+              nextRunAt:
+                job.enabled && job.intervalMinutes !== null
+                  ? new Date(Date.parse(run.finishedAt) + job.intervalMinutes * 60000).toISOString()
+                  : null,
+            }
           : job,
       )
       await this.#writeWorkspace(state)

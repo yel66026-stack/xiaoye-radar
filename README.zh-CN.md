@@ -4,9 +4,9 @@
 
 [English](README.md) · [架构](docs/architecture.md) · [Adapter SDK](docs/source-adapter.md) · [规则说明](docs/rules.md) · [社区协作](docs/community.md) · [合规边界](docs/compliance.md)
 
-Community Edition 用来处理你有权访问的公开内容副本。它可以导入 CSV、JSON、本地 RSS/Atom 文件、Markdown 和纯文本，随后执行时间过滤、关键词筛选、排除、评分与去重，再把候选内容交给人审核。整个流程在本机完成，不要求平台账号，也不调用私有服务。
+Community Edition 用来处理你有权访问的公开内容。它可以导入 CSV、JSON、本地 RSS/Atom 文件、Markdown 和纯文本，按地区、时间范围与关键词组合筛选，定时重新扫描、去重保存，再把候选内容交给人审核。`0.5.0` 增加实验性小红书网页接入，需要在独立窗口正常登录；文件工作流可独立使用。
 
-> 当前版本为 `v0.4.2` Community Edition。Windows 便携版目前未签名；安全问题请通过 GitHub Private Vulnerability Reporting 私密提交，不要发到公开 Issue。
+> 当前源码版本为 `v0.5.0` Community Edition。小红书真实账号页面尚需使用者验收，定时扫描需要应用保持运行。Windows 便携版目前未签名；安全问题请通过 GitHub Private Vulnerability Reporting 私密提交，不要发到公开 Issue。
 
 ![小夜雷达 Community 总览](docs/images/dashboard.png)
 
@@ -14,7 +14,7 @@ Community Edition 用来处理你有权访问的公开内容副本。它可以�
 
 很多监测项目都会重复写一段相似的中间流程。数据来自不同格式，字段要先统一；内容要按时间、关键词和来源过滤；重复结果不能一遍遍进入队列；机器给出的候选还得留给人确认。Community Edition 把这段通用工作整理成一个能直接运行的桌面应用，也把关键能力拆成几个清楚的 TypeScript workspace。
 
-这个版本可以独立使用。它没有 Pro License 检查、私有 API、账号登录、遥测和自动更新。
+这个版本可以独立使用。它没有 Pro License 检查、私有 API、遥测和自动更新；可选的小红书会话仅保存在本机。
 
 ## 使用场景
 
@@ -24,9 +24,14 @@ Community Edition 用来处理你有权访问的公开内容副本。它可以�
 - 本地 RSS/Atom 监测
 - 遵守授权边界的自定义 Source Adapter
 
-这些场景共用同一条来源无关的数据管线，不会把小夜雷达变成平台爬虫，也不会取消最终的人工审核。
+这些场景共用同一条来源无关的数据管线，并保留人工审核。
 
 ## 已有能力
+
+- 浙江全省或城市＋最近 N 天/指定日期＋任一/全部关键词的组合筛选
+- 应用内定时扫描、暂停/恢复、重启补扫、原文件刷新与扫描历史
+- 实验性小红书正常网页搜索与可访问笔记提取，遇到登录/验证/页面变化时暂停
+- 地点或日期缺失的相关内容单独保存为待确认；IP 属地不替代笔记地点
 
 - Include、Exclude、Text Contains、来源、时间窗、评分、优先级和启停规则
 - 按正文、来源 ID 或 URL 生成 SHA-256 指纹，并按规则语义修订进行去重
@@ -42,6 +47,8 @@ Community Edition 用来处理你有权访问的公开内容副本。它可以�
 ![候选结果](docs/images/candidates.png)
 
 ## 快速开始
+
+完整操作说明、数据字段和限制见 [浙江地区、时间与关键词监测](docs/zhejiang-monitoring.md)。
 
 开发环境需要 Node.js `22.12` 或更高版本。桌面发行包当前以 Windows 10/11 为目标。
 
@@ -124,7 +131,7 @@ deduplication: content
 
 每个来源都遵循 `initialize`、`validateConfig`、`fetch`、`normalize`、`healthCheck` 和 `dispose` 生命周期。`v0.4.2` 内置的是本地文件 Adapter，workspace 包还没有宣称发布到 npm。第三方 Adapter 的接口、错误处理和测试方法见 [docs/source-adapter.md](docs/source-adapter.md)。
 
-Community 不包含网页抓取器、验证码绕过、凭据收集、认证绕过和平台风控规避实现。
+可选网页接入位于桌面应用的 `xiaohongshu-browser.ts` 与 `xiaohongshu-content.ts`。Community 不包含验证码绕过、凭据提取、认证绕过和平台风控规避实现。
 
 ## 示例
 
@@ -138,18 +145,19 @@ Community 不包含网页抓取器、验证码绕过、凭据收集、认证绕�
 
 ## Community 与 Pro
 
-| 能力                          | Community | Pro                  |
-| ----------------------------- | --------- | -------------------- |
-| 通用规则引擎                  | 有        | 保留现有商业实现     |
-| CSV、JSON、RSS/Atom、本地文件 | 有        | 视产品能力而定       |
-| 本地存储与人工审核            | 有        | 有                   |
-| 公共 Adapter SDK 契约         | 有        | 私有接线需所有者确认 |
-| 平台专用连接器                | 无        | 有                   |
-| 账号、登录与 Session          | 无        | 有                   |
-| 专业规则包与评分              | 基础示例  | 商业高级能力         |
-| 商业自动化                    | 无        | 有                   |
+| 能力                          | Community              | Pro                  |
+| ----------------------------- | ---------------------- | -------------------- |
+| 通用规则引擎                  | 有                     | 保留现有商业实现     |
+| CSV、JSON、RSS/Atom、本地文件 | 有                     | 视产品能力而定       |
+| 本地存储与人工审核            | 有                     | 有                   |
+| 公共 Adapter SDK 契约         | 有                     | 私有接线需所有者确认 |
+| 平台专用连接器                | 实验性小红书网页接入   | 有                   |
+| 账号、登录与 Session          | 可选独立本地浏览器会话 | 有                   |
+| 专业规则包与评分              | 基础示例               | 商业高级能力         |
+| 商业自动化                    | 无                     | 有                   |
+| 应用内定时扫描                | 有                     | 有                   |
 
-这个仓库没有 Pro 平台代码、选择器、登录状态、客户数据和完整商业规则包。更细的边界见 [docs/editions.md](docs/editions.md)。
+这个仓库没有复制 Pro 平台代码、私有选择器、登录状态、客户数据和完整商业规则包。小红书网页接入为独立编写的可选模块。更细的边界见 [docs/editions.md](docs/editions.md)。
 
 ## 参与项目
 
@@ -165,4 +173,4 @@ Community 使用独立本地目录，不读写 Pro 数据。Telemetry 与自动�
 
 ## 路线与许可证
 
-版本规划见 [ROADMAP.md](ROADMAP.md)，本次变化和限制见 [`v0.4.2` Release Notes](docs/RELEASE_NOTES_v0.4.2.md)。项目使用 Apache License 2.0，第三方信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+版本规划见 [ROADMAP.md](ROADMAP.md)，本次变化和限制见 [Changelog](CHANGELOG.md) 与 [监测操作说明](docs/zhejiang-monitoring.md)。项目使用 Apache License 2.0，第三方信息见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

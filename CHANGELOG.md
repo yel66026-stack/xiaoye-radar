@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-10-14
+
+### Added
+
+- Zhejiang province/city filtering based on explicit note location, inclusive absolute date ranges and AND/OR keyword matching.
+- Visual monitor creation, persistent interval schedules, pause/resume, missed-run catch-up and per-task candidate exports.
+- Experimental Xiaohongshu normal-browser search and public note extraction with a dedicated local session, bounded navigation/scrolling, and pause on login, verification or layout failures.
+- Separate persisted uncertain records for otherwise matching notes whose location or publication date is unavailable.
+- Synthetic Zhejiang monitoring examples and regression tests for filtering, parsing, source refresh, scheduling, restart recovery and evidence resolution.
+
+### Changed
+
+- File monitors re-read their original selected files on each run; legacy imports without an original path continue using their stored copy.
+- New workspace fields default safely when reading older version-1 workspaces; old tasks remain manual-only.
+- Deduplication occurs after constraints, so an invalid copy cannot suppress a valid record with the same identity.
+- CSV includes location and rule revision. UI shows next runs, failures and region/uncertain counts.
+- Refreshed lockfile dependencies to resolve the three high-severity dependency advisories found during implementation. Remaining audit findings are moderate and confined to the Electron packaging dependency chain.
+
+### Limitations
+
+- Real-account Xiaohongshu login/search has not been validated by the automated synthetic-page tests; webpage integration is experimental and bounded, not a full-platform index.
+- Scheduled monitoring runs only while the desktop application remains open. Closing the main window stops it.
+- New workspaces are readable by this version; older binaries cannot read the added strict-schema fields. Back up before upgrade.
+
 ## [0.4.2] - 2026-09-15
 
 ### Added

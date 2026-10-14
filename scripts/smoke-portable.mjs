@@ -201,6 +201,8 @@ try {
     excluded: 10,
     timeFiltered: 10,
     ruleFiltered: 10,
+    regionFiltered: 0,
+    unverified: 0,
   }
   if (JSON.stringify(firstLatest.stats) !== JSON.stringify(firstRunStats)) {
     throw new Error('Portable Demo workflow returned unexpected statistics')
@@ -223,6 +225,8 @@ try {
     excluded: 18,
     timeFiltered: 10,
     ruleFiltered: 16,
+    regionFiltered: 0,
+    unverified: 0,
   }
   if (JSON.stringify(legalLatest.stats) !== JSON.stringify(legalRunStats)) {
     throw new Error('Portable Legal Inquiry Triage workflow returned unexpected statistics')
@@ -262,6 +266,8 @@ try {
     excluded: 18,
     timeFiltered: 10,
     ruleFiltered: 16,
+    regionFiltered: 0,
+    unverified: 0,
   }
   if (JSON.stringify(reopenedLatest.stats) !== JSON.stringify(reopenedStats)) {
     throw new Error('Reopened portable app did not reuse persisted candidate fingerprints')

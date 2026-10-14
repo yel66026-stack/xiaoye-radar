@@ -31,6 +31,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { ReviewStatus } from '@xiaoye-radar/core'
 import type { WorkspaceState } from '@xiaoye-radar/storage'
 import type { ActionResponse, BootstrapResponse } from '../shared/contracts'
+import { MonitorComposer } from './MonitorComposer'
+import { contentLocation } from '../../../../packages/core/src/region'
 
 type Page =
   'dashboard' | 'sources' | 'rules' | 'jobs' | 'candidates' | 'review' | 'history' | 'settings'
@@ -85,6 +87,7 @@ function formatDate(value: string | null): string {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
+    timeZone: 'Asia/Shanghai',
   }).format(new Date(value))
 }
 
@@ -166,6 +169,7 @@ export function App(): ReactNode {
   const [notes, setNotes] = useState<Record<string, string>>({})
   const [navigationOpen, setNavigationOpen] = useState(false)
   const [candidateLimit, setCandidateLimit] = useState(100)
+  const [candidateRuleFilter, setCandidateRuleFilter] = useState('')
   const mainContent = useRef<HTMLElement>(null)
 
   const state: WorkspaceState = bootstrap?.state ?? {
@@ -175,6 +179,7 @@ export function App(): ReactNode {
     jobs: [],
     candidates: [],
     runs: [],
+    unverified: [],
   }
 
   useEffect(() => {
@@ -186,6 +191,22 @@ export function App(): ReactNode {
       )
   }, [])
 
+  useEffect(() => {
+    let active = true
+    const timer = setInterval(() => {
+      void window.xiaoyeCommunity
+        .getBootstrap()
+        .then((value) => {
+          if (active) setBootstrap(value)
+        })
+        .catch(() => undefined)
+    }, 5000)
+    return () => {
+      active = false
+      clearInterval(timer)
+    }
+  }, [])
+
   const effectiveSource = selectedSource || state.sources[0]?.id || ''
   const effectiveRule = selectedRule || state.rules[0]?.id || ''
 
@@ -193,14 +214,19 @@ export function App(): ReactNode {
   const approved = state.candidates.filter(({ reviewStatus }) => reviewStatus === 'approved').length
   const filteredCandidates = useMemo(
     () =>
-      reviewFilter === 'all'
+      (reviewFilter === 'all'
         ? state.candidates
-        : state.candidates.filter(({ reviewStatus }) => reviewStatus === reviewFilter),
-    [reviewFilter, state.candidates],
+        : state.candidates.filter(({ reviewStatus }) => reviewStatus === reviewFilter)
+      ).filter((entry) => !candidateRuleFilter || entry.ruleId === candidateRuleFilter),
+    [reviewFilter, state.candidates, candidateRuleFilter],
   )
   const pageCandidates =
     page === 'review'
-      ? state.candidates.filter(({ reviewStatus }) => reviewStatus === 'pending')
+      ? state.candidates.filter(
+          (entry) =>
+            entry.reviewStatus === 'pending' &&
+            (!candidateRuleFilter || entry.ruleId === candidateRuleFilter),
+        )
       : filteredCandidates
   const visibleCandidates = pageCandidates.slice(0, candidateLimit)
 
@@ -345,9 +371,7 @@ export function App(): ReactNode {
                   <br />
                   可审核的信号。
                 </h1>
-                <p>
-                  数据源接入、规则过滤、内容去重与人工审核，在一个不依赖登录和私有服务的桌面工作台中完成。
-                </p>
+                <p>按地区、时间和关键词查找内容，定时扫描、自动去重、保存记录，再由你审核。</p>
                 <div className="hero-actions">
                   <button
                     className="primary-button"
@@ -604,7 +628,21 @@ export function App(): ReactNode {
             <PageTitle
               eyebrow="MONITORING WORKFLOW"
               title="监测任务"
-              detail="选择一个公开数据源与规则集，执行可重复、可审计的本地扫描。"
+              detail="设置浙江地区、时间范围和关键词；扫描结果会自动保存，任务可按间隔重复运行。"
+            />
+            <MonitorComposer
+              sources={state.sources}
+              busy={busy !== null}
+              create={(request) =>
+                action('create-monitor', () => window.xiaoyeCommunity.createMonitor(request))
+              }
+              connect={() =>
+                utilityAction(
+                  'connect-xhs',
+                  () => window.xiaoyeCommunity.openXiaohongshu(),
+                  '已打开小红书窗口，请完成登录。',
+                )
+              }
             />
             <section className="section-card run-panel">
               <div className="run-fields">
@@ -656,7 +694,9 @@ export function App(): ReactNode {
               </div>
               <div className="run-note">
                 <ShieldCheck aria-hidden="true" />
-                <span>扫描只读取导入的本地副本；不会登录平台、绕过访问控制或调用私有 API。</span>
+                <span>
+                  文件源每轮重新读取原文件；小红书源读取已登录窗口可访问的搜索结果。日期和地点缺失会进入待确认。
+                </span>
               </div>
             </section>
             <section className="section-card">
@@ -679,12 +719,84 @@ export function App(): ReactNode {
                       </span>
                       <span>
                         <strong>{job.name}</strong>
-                        <small>{job.enabled ? 'Enabled' : 'Disabled'}</small>
+                        <small>
+                          {job.enabled ? '已启用' : '已暂停'} ·{' '}
+                          {job.intervalMinutes === null
+                            ? '仅手动'
+                            : `每 ${job.intervalMinutes} 分钟`}
+                        </small>
+                        {(() => {
+                          const rule = state.rules.find((entry) => entry.id === job.ruleId)
+                          return rule ? (
+                            <small>
+                              {rule.regionFilter?.province ?? '不限地区'}{' '}
+                              {rule.regionFilter?.cities.join('、')} · {rule.include.join(' / ')} ·{' '}
+                              {rule.timeWindowDays !== null
+                                ? `最近 ${rule.timeWindowDays} 天`
+                                : `${formatDate(rule.publishedAfter)} 至 ${formatDate(rule.publishedBefore)}`}
+                            </small>
+                          ) : null
+                        })()}
+                        {job.lastError ? (
+                          <small className="job-error">{job.lastError}</small>
+                        ) : null}
                       </span>
                       <span>
                         <small>上次运行</small>
                         <b>{formatDate(job.lastRunAt)}</b>
+                        <small>下次：{formatDate(job.nextRunAt)}</small>
                       </span>
+                      <div className="job-actions">
+                        <label>
+                          频率
+                          <select
+                            aria-label={`${job.name}扫描频率`}
+                            disabled={busy !== null}
+                            value={job.intervalMinutes ?? 0}
+                            onChange={(event) =>
+                              void action('schedule', () =>
+                                window.xiaoyeCommunity.updateJob(
+                                  job.id,
+                                  job.enabled,
+                                  Number(event.target.value) || null,
+                                ),
+                              )
+                            }
+                          >
+                            {[0, 15, 30, 60, 360, 1440].map((minutes) => (
+                              <option key={minutes} value={minutes}>
+                                {minutes === 0 ? '仅手动' : `每 ${minutes} 分钟`}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          disabled={busy !== null}
+                          onClick={() =>
+                            void action('toggle-job', () =>
+                              window.xiaoyeCommunity.updateJob(
+                                job.id,
+                                !job.enabled,
+                                job.intervalMinutes,
+                              ),
+                            )
+                          }
+                        >
+                          {job.enabled ? '暂停' : '启用'}
+                        </button>
+                        <button
+                          type="button"
+                          className="primary-button"
+                          disabled={busy !== null}
+                          onClick={() =>
+                            void action('run-job', () => window.xiaoyeCommunity.runJob(job.id))
+                          }
+                        >
+                          {busy === 'run-job' ? '扫描中…' : '立即扫描'}
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -713,7 +825,11 @@ export function App(): ReactNode {
                       onClick={() =>
                         void utilityAction(
                           'export-csv',
-                          () => window.xiaoyeCommunity.exportCandidates('csv'),
+                          () =>
+                            window.xiaoyeCommunity.exportCandidates(
+                              'csv',
+                              candidateRuleFilter || undefined,
+                            ),
                           'CSV 已导出',
                         )
                       }
@@ -727,7 +843,11 @@ export function App(): ReactNode {
                       onClick={() =>
                         void utilityAction(
                           'export-json',
-                          () => window.xiaoyeCommunity.exportCandidates('json'),
+                          () =>
+                            window.xiaoyeCommunity.exportCandidates(
+                              'json',
+                              candidateRuleFilter || undefined,
+                            ),
                           'JSON 已导出',
                         )
                       }
@@ -738,6 +858,77 @@ export function App(): ReactNode {
                 ) : undefined
               }
             />
+            <label className="candidate-task-filter">
+              按监测条件查看
+              <select
+                value={candidateRuleFilter}
+                onChange={(event) => {
+                  setCandidateRuleFilter(event.target.value)
+                  setCandidateLimit(100)
+                }}
+              >
+                <option value="">全部条件</option>
+                {state.rules.map((rule) => (
+                  <option key={rule.id} value={rule.id}>
+                    {rule.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {page === 'candidates' &&
+            state.unverified.some(
+              (entry) => !candidateRuleFilter || entry.ruleId === candidateRuleFilter,
+            ) ? (
+              <details className="section-card unverified-panel">
+                <summary>
+                  待确认（
+                  {
+                    state.unverified.filter(
+                      (entry) => !candidateRuleFilter || entry.ruleId === candidateRuleFilter,
+                    ).length
+                  }
+                  ）· 缺少地点或发布时间
+                </summary>
+                <p>
+                  这些记录命中了关键词，但暂时无法确认所有限制条件。补充来源中的地点或日期并再次扫描后，符合条件的记录会自动转入候选。
+                </p>
+                {state.unverified
+                  .filter((entry) => !candidateRuleFilter || entry.ruleId === candidateRuleFilter)
+                  .slice(0, 100)
+                  .map((entry) => (
+                    <article key={entry.id} className="unverified-record">
+                      <h3>{entry.item.title}</h3>
+                      <p>{entry.item.content.slice(0, 300)}</p>
+                      <small>
+                        {entry.reasons
+                          .map((reason) =>
+                            reason === 'Published time is missing'
+                              ? '发布时间缺失'
+                              : reason === 'Note location is missing'
+                                ? '笔记地点缺失'
+                                : reason,
+                          )
+                          .join(' · ')}
+                      </small>
+                      {entry.item.url ? (
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={() =>
+                            void utilityAction(
+                              'open-unverified',
+                              () => window.xiaoyeCommunity.openCandidateUrl(entry.id),
+                              '已打开原文',
+                            )
+                          }
+                        >
+                          查看原文
+                        </button>
+                      ) : null}
+                    </article>
+                  ))}
+              </details>
+            ) : null}
             {page === 'candidates' ? (
               <div className="filter-bar" role="group" aria-label="候选状态筛选">
                 {(['all', 'pending', 'approved', 'rejected', 'archived'] as const).map((status) => (
@@ -754,9 +945,14 @@ export function App(): ReactNode {
                     {status === 'all' ? '全部' : outcomeLabel(status)}
                     <span>
                       {status === 'all'
-                        ? state.candidates.length
-                        : state.candidates.filter((candidate) => candidate.reviewStatus === status)
-                            .length}
+                        ? state.candidates.filter(
+                            (entry) => !candidateRuleFilter || entry.ruleId === candidateRuleFilter,
+                          ).length
+                        : state.candidates.filter(
+                            (candidate) =>
+                              candidate.reviewStatus === status &&
+                              (!candidateRuleFilter || candidate.ruleId === candidateRuleFilter),
+                          ).length}
                     </span>
                   </button>
                 ))}
@@ -783,6 +979,7 @@ export function App(): ReactNode {
                         </span>
                         <span>{candidate.item.source}</span>
                         <span>{formatDate(candidate.item.publishedAt)}</span>
+                        <span>{contentLocation(candidate.item) || '未标注地点'}</span>
                       </div>
                       <h3>{candidate.item.title || 'Untitled content'}</h3>
                       <p>{candidate.item.content}</p>
@@ -880,7 +1077,11 @@ export function App(): ReactNode {
                   {state.runs.map((run) => (
                     <article key={run.id}>
                       <div className="history-status">
-                        <Check aria-hidden="true" />
+                        {run.status === 'success' ? (
+                          <Check aria-hidden="true" />
+                        ) : (
+                          <X aria-hidden="true" />
+                        )}
                       </div>
                       <div>
                         <span>{formatDate(run.finishedAt)}</span>
@@ -890,8 +1091,10 @@ export function App(): ReactNode {
                         <p>
                           {run.stats.total} 输入 · {run.stats.candidates} 候选 ·{' '}
                           {run.stats.excluded} 排除 · {run.stats.duplicates} 重复 ·{' '}
-                          {run.stats.timeFiltered} 超时
+                          {run.stats.timeFiltered} 时间不符 · {run.stats.regionFiltered} 地区不符 ·{' '}
+                          {run.stats.unverified} 待确认
                         </p>
+                        {run.error ? <p className="job-error">{run.error}</p> : null}
                       </div>
                       <code>{run.status}</code>
                     </article>
@@ -955,10 +1158,9 @@ export function App(): ReactNode {
                 <div className="setting-icon" aria-hidden="true">
                   <GitFork />
                 </div>
-                <h2>开源边界</h2>
+                <h2>扫描与保存</h2>
                 <p>
-                  Community
-                  只包含通用规则、公开文件适配器、本地存储与人工审核。平台登录及商业能力保留在 Pro。
+                  扫描记录、候选和待确认内容保存在本机。小红书网页接入为实验性功能，需要你正常登录；登录失效、验证或页面变化时会暂停任务。定时扫描仅在应用运行时执行。
                 </p>
               </section>
             </div>
