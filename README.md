@@ -10,6 +10,12 @@ Xiaoye Radar Community turns authorized, public-content exports into a local rev
 
 ![Xiaoye Radar Community dashboard](docs/images/dashboard.png)
 
+## New in this repository: Shiye Workbench 2.2.2
+
+[Shiye Workbench / 拾页工作台](apps/shiye-workbench/README.md) is now open source in this repository under Apache-2.0. It adds a Windows Daylight desktop application with a React interface, Python/SQLite engine, keyword tasks, combined filters, vocabulary, favorites, notes, backups, and CSV/Excel/JSON export. Its optional Xiaohongshu workflow uses the user's own browser login and pauses for verification or access limits.
+
+This is an additional application with its own build and data directory. The Community app above remains version 0.4.2; Shiye keeps its existing 2.2.2 version. Their databases are not interchangeable. Source setup, validation, and scope are described in the [update notes](docs/shiye-workbench-update.md).
+
 ## Why Xiaoye Radar
 
 Monitoring projects repeatedly need the same middle layer: normalize several input formats, filter a time window, apply include and exclusion rules, rank matches, suppress repeats, keep an audit trail, and leave the final decision to a person. Xiaoye Radar packages that workflow as a usable desktop application and small TypeScript workspaces.

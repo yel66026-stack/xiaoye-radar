@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [Shiye Workbench 2.2.2 source addition] - 2026-10-21
+
+### Added
+
+- Open-sourced Shiye Workbench Daylight 2.2.2 as `apps/shiye-workbench`, including React frontend, Python/SQLite engine, regression tests, locked dependencies, and Windows executable/installer build scripts.
+- Added development instructions, Apache-2.0 licensing, preserved third-party notices, and an independent CI job for frontend and isolated engine/adapter checks.
+- Excluded runtime databases, browser sessions, logs, exports, backups, dependencies, and build outputs from source publication.
+
+### Fixed
+
+- Secret scanner now uses NUL-delimited Git paths so files with Chinese names and spaces are scanned correctly.
+
+### Scope
+
+- This is a repository addition. Xiaoye Radar Community remains 0.4.2 and Shiye Workbench remains 2.2.2, with separate build systems and data directories.
+
 ## [0.4.2] - 2026-09-15
 
 ### Added

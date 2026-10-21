@@ -1,0 +1,6 @@
+拾页工作台 Pro · Daylight 2.2.2
+
+完整开发、验证与打包步骤见上一级 README.md。
+此版本的前端位于 ../web，必须先 pnpm install --frozen-lockfile、pnpm build。
+构建产物进入本目录的 ui，之后运行 main.py 或执行 build.ps1 打包 EXE。
+所有采集、组合筛选、词库和导出通过 daylight_api.py 接入原业务引擎。

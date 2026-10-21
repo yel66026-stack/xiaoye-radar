@@ -1,0 +1,31 @@
+# Local dependencies and generated builds
+.venv/
+venv/
+node_modules/
+build/
+dist/
+src/ui/
+__pycache__/
+*.py[cod]
+*.spec
+
+# Never publish workspaces, browser login state, or user exports
+development/
+data/
+qa/
+fixture_profile/
+condition_profile/
+browser_profile/
+webview/
+采集结果/
+导出/
+备份/
+浏览器资料/
+*.sqlite*
+*.db*
+*.log
+*.bak
+*.exe
+*.zip
+.env
+.env.*

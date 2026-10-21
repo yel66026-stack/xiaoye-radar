@@ -5,7 +5,16 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  { ignores: ['node_modules', 'out', 'release', 'coverage', 'design-system'] },
+  {
+    ignores: [
+      'node_modules',
+      'out',
+      'release',
+      'coverage',
+      'design-system',
+      'apps/shiye-workbench/**',
+    ],
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {

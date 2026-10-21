@@ -1,0 +1,44 @@
+name: Shiye Workbench
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-shiye:
+    name: Verify Shiye Workbench
+    runs-on: windows-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: apps/shiye-workbench
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+          run_install: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install locked frontend dependencies
+        run: pnpm --dir web install --frozen-lockfile
+      - name: Test frontend bridge
+        run: pnpm --dir web test
+      - name: Build frontend assets
+        run: pnpm --dir web build
+      - name: Install locked Python dependencies
+        run: python -m pip install -r src/requirements-lock.txt
+      - name: Compile Python source
+        run: python -m compileall -q src
+      - name: Test engine against isolated browser fixtures
+        run: python src/main.py --self-test "$env:RUNNER_TEMP/shiye-engine"
+      - name: Test native API adapter against isolated fixtures
+        run: python src/main.py --adapter-test "$env:RUNNER_TEMP/shiye-adapter"

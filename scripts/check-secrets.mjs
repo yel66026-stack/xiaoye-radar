@@ -40,7 +40,7 @@ function failOperationally(message) {
 
 let listed
 try {
-  listed = execFileSync('git', ['-C', root, 'ls-files', '-co', '--exclude-standard'], {
+  listed = execFileSync('git', ['-C', root, 'ls-files', '-z', '-co', '--exclude-standard'], {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'ignore'],
   })
@@ -48,7 +48,7 @@ try {
   failOperationally('unable to enumerate repository files with Git')
 }
 
-const files = [...new Set(listed.split(/\r?\n/u).filter(Boolean))]
+const files = [...new Set(listed.split('\0').filter(Boolean))]
   .map((path) => resolve(root, path))
   .filter((path) => !ignored.test(path))
   .filter((path) => !binaryExtensions.has(extname(path).toLocaleLowerCase()))

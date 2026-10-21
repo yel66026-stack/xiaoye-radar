@@ -1,5 +1,11 @@
 # 小夜雷达 Xiaoye Radar
 
+## 本次仓库更新：拾页工作台 2.2.2 开源
+
+[拾页工作台 · Daylight](apps/shiye-workbench/README.md) 已作为本仓库新增应用，采用 Apache-2.0 开源。包含 React 桌面界面、Python/SQLite 业务引擎、关键词任务、组合筛选、词库、收藏、备注、备份，以及 Excel / CSV / JSON 导出。小红书工作流使用用户自己的浏览器登录，遇到验证或访问限制时暂停并等待人工处理。
+
+拾页工作台独立构建、独立存储，保留 2.2.2 版本号。原小野雷达社区版仍为 0.4.2；两者数据库不通用。请查看[本次更新与开发说明](docs/shiye-workbench-update.md)。
+
 **小夜雷达，开源公开内容监测、规则过滤与人工审核工具。**
 
 [English](README.md) · [架构](docs/architecture.md) · [Adapter SDK](docs/source-adapter.md) · [规则说明](docs/rules.md) · [社区协作](docs/community.md) · [合规边界](docs/compliance.md)
