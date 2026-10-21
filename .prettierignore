@@ -4,3 +4,6 @@ release
 coverage
 package-lock.json
 design-system
+
+# Imported application maintains its own frontend build and tests.
+apps/shiye-workbench

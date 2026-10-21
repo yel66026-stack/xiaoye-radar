@@ -1,5 +1,11 @@
 # Community and Pro editions
 
+## Shiye Workbench source addition (2026-10-21)
+
+Shiye Workbench Daylight 2.2.2 is now separately open-sourced in `apps/shiye-workbench` under Apache-2.0. Its UI retains the historical “Pro” name; it does not require a paid license or license server. Its Python engine and React UI are separate from both Xiaoye Radar Community and the private Xiaoye Radar Pro 0.3.1 application described below.
+
+The following boundary rules continue to describe the Community application. Shiye's optional platform-specific browser workflow is contained in its own application. Only source code and synthetic fixtures are published; no user sessions, browser profiles, customer content, or runtime databases are included. See [the update notes](shiye-workbench-update.md).
+
 Xiaoye Radar Community is a complete local workflow for authorized content exports. Pro remains the private commercial desktop product with platform-specific and professional workflows.
 
 | Capability                                            | Community `0.4.2`       | Pro `0.3.1` audited build                                   |

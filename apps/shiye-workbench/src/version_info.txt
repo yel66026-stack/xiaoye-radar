@@ -1,0 +1,12 @@
+VSVersionInfo(
+ ffi=FixedFileInfo(filevers=(2,2,2,0),prodvers=(2,2,2,0),mask=0x3f,flags=0x0,OS=0x40004,fileType=0x1,subtype=0x0,date=(0,0)),
+ kids=[StringFileInfo([StringTable('080404B0',[
+  StringStruct('CompanyName','拾页工作台'),
+  StringStruct('FileDescription','拾页 · Daylight 内容采集工作台'),
+  StringStruct('FileVersion','2.2.2'),
+  StringStruct('InternalName','ShiyePro'),
+  StringStruct('OriginalFilename','拾页工作台.exe'),
+  StringStruct('ProductName','拾页内容采集工作台 Pro'),
+  StringStruct('ProductVersion','2.2.2')
+ ])]),VarFileInfo([VarStruct('Translation',[2052,1200])])]
+)
