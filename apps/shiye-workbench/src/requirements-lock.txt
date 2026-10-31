@@ -16,5 +16,5 @@ pyinstaller-hooks-contrib==2026.8
 pythonnet==3.2.1
 pywebview==6.2.1
 pywin32-ctypes==0.2.3
-setuptools==84.0.0
+setuptools==84.1.0
 typing_extensions==4.16.0
