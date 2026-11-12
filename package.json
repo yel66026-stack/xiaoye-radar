@@ -33,7 +33,7 @@
   },
   "dependencies": {
     "csv-parse": "7.0.2",
-    "fast-xml-parser": "5.11.1",
+    "fast-xml-parser": "5.12.0",
     "lucide-react": "1.43.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
